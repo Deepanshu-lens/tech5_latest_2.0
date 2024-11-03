@@ -1,0 +1,32 @@
+---
+import { actions } from "astro:actions";
+import { Icon } from "astro-icon/components";
+const { isVertical } = Astro.props;
+const { data, error } = await Astro.callAction(actions.user.pages, []);
+const referer = Astro.request.headers.get("Referer") || "";
+---
+
+<div
+  class={`${isVertical ? "flex flex-col items-center space-y-12" : "flex justify-center space-x-6 w-full"}`}
+>
+  {
+    data &&
+      data.length > 0 &&
+      data.map((link) => {
+        return (
+          <a
+            href={link.link === "live" ? "/" : link.link}
+            class={`text-base transition-all px-3 py-2 rounded-md ${
+              (new URL(referer).pathname === "/" && link.link === "live") ||
+              new URL(referer).pathname.replace("/", "") === link.link
+                ? "font-black text-[#015A62]"
+                : "font-medium hover:text-[#015A62]"
+            } flex ${isVertical ? "flex-col items-center space-y-2" : "flex-row items-center space-x-2"}`}
+          >
+            <Icon name={link.icon} width="24" height="24" />
+            <span>{link.title}</span>
+          </a>
+        );
+      })
+  }
+</div>

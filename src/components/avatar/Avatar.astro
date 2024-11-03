@@ -1,0 +1,38 @@
+---
+import { actions } from "astro:actions";
+const { data, error } = await Astro.callAction(actions.user.avatar, []);
+const { isVertical } = Astro.props;
+const MAX_NAME_LENGTH = 20;
+const MAX_EMAIL_LENGTH = 30;
+let displayName =
+  data?.user.name || `${data?.user.firstName} ${data?.user.lastName || ""}`;
+let displayEmail = data?.user.email;
+
+// Trim the display name to ensure it doesn't exceed MAX_NAME_LENGTH
+if (displayName.length > MAX_NAME_LENGTH) {
+  displayName = displayName.slice(0, MAX_NAME_LENGTH - 3) + "...";
+}
+
+if (data?.user.email.length > MAX_EMAIL_LENGTH) {
+  displayEmail = data?.user.email.slice(0, MAX_EMAIL_LENGTH - 3) + "...";
+}
+---
+
+{
+  data?.success && (
+    <button class="flex items-center space-x-3 hover:bg-accent py-1.5 px-2 rounded-md">
+      <img
+        src={data?.avatar}
+        alt="User Avatar"
+        class="rounded-lg"
+        width={isVertical ? 64 : 36}
+      />
+      {!isVertical && data.user && (
+        <div class="space-y-0 flex-col flex items-start">
+          <span class="text-sm ">{displayName}</span>
+          <span class="text-xs">{displayEmail}</span>
+        </div>
+      )}
+    </button>
+  )
+}
