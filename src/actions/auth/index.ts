@@ -26,13 +26,13 @@ export const auth = {
             message: "Incorrect email or password.",
           });
         });
-      pb.authStore.save(token);
-      // context.cookies.set("pb_auth", pb.authStore.exportToCookie(), {
-      //   httpOnly: false, // Allows client-side access
-      //   path: "/", // Ensures it’s accessible across the site
-      //   sameSite: "strict", // Prevents CSRF attacks by restricting cross-site requests
-      //   secure: false,
-      // });
+      // pb.authStore.save(token);
+      context.cookies.set("pb_auth", pb.authStore.exportToCookie(), {
+        httpOnly: false, // Allows client-side access
+        path: "/", // Ensures it’s accessible across the site
+        sameSite: "strict", // Prevents CSRF attacks by restricting cross-site requests
+        secure: false,
+      });
       return {
         success: true,
         token,

@@ -50,7 +50,7 @@ const { title, topbar = true } = Astro.props;
   <body class="antialiased">
     <ModeWatcher client:load />
     <User client:only="svelte" />
-    {topbar && <PageBar location="top" />}
+    {topbar && <PageBar location="right" />}
     <Toaster client:only="svelte" />
     <slot />
   </body>
