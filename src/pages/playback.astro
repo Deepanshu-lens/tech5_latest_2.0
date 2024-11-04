@@ -2,8 +2,6 @@
 import Layout from "@/layouts/Layout.astro";
 import pb from "@/lib/pb";
 import PlaybackLayout from "@/components/playback/layout.svelte";
-import CameraManager from "@/managers/camera.svelte";
-import NodeManager from "@/managers/node.svelte";
 
 if (!pb.authStore.model) {
   console.error("No logged in user found. Redirect to login.");
@@ -12,7 +10,5 @@ if (!pb.authStore.model) {
 ---
 
 <Layout title="LENS View | Playback" topbar>
-  <CameraManager client:only="svelte" />
-  <NodeManager client:only="svelte" />
   <PlaybackLayout client:only="svelte" />
 </Layout>

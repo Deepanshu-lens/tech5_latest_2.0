@@ -4,6 +4,8 @@ import { ModeWatcher } from "mode-watcher";
 import { Toaster } from "@/components/ui/sonner";
 import User from "@/managers/User.svelte";
 import PageBar from "@/components/bars/PageBar.astro";
+import CameraManager from "@/managers/camera.svelte";
+import NodeManager from "@/managers/node.svelte";
 import pb from "@/lib/pb";
 
 interface Props {
@@ -49,6 +51,8 @@ const { title, topbar = true } = Astro.props;
   </head>
   <body class="antialiased">
     <ModeWatcher client:load />
+    <CameraManager client:only="svelte" />
+  <NodeManager client:only="svelte" />
     <User client:only="svelte" />
     {topbar && <PageBar location="top" />}
     <Toaster client:only="svelte" />

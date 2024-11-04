@@ -1,7 +1,7 @@
 <script lang="ts">
     // Imports
     import { Label } from "@/components/ui/label";
-    import { ChevronRight, Plus, Search, Trash2 } from "lucide-svelte";
+    import { ChevronRight, Plus, Search } from "lucide-svelte";
     import Input from "@/components/ui/input/input.svelte";
     import Button from "@/components/ui/button/button.svelte";
     import Doors from "@/components/atlas/doors.svelte";
@@ -41,8 +41,10 @@
           ssl,
           session: $panels.find((panel:any) => panel.id === $activePanel)?.session,
         };
-  
+        await pb.collection("atlas").create(panelDataToSubmit);
 
+showRightPanel = false;
+  toast.success("Panel added successfully");
       } catch (error) {
         console.error("Error adding panel:", error);
         toast.error("Failed to add panel");

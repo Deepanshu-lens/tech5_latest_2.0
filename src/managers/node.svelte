@@ -35,7 +35,6 @@
     } catch (error) {
       console.error("Failed realtime camera");
     }
-
-    console.log("nodes", $nodes);
+    
   </script>
   

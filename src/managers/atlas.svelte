@@ -17,6 +17,7 @@
   })();
 
   try {
+      pb.autoCancellation(false);
       pb.collection("atlas").subscribe("*", (e) => {
         if (e.action === "create") {
           panels.update((current) => [...current, e.record]);

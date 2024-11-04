@@ -17,7 +17,7 @@
     $: getInitialCameras($selectedNode);
   
     try {
-      pb.collection("camera").subscribe("*", (e) => {
+        pb.collection("camera").subscribe("*", (e) => {
         if (e.action === "create") {
           const validated = validateCamera(e.record);
           if (validated) cameras.update((current) => [...current, validated]);
@@ -36,6 +36,5 @@
     } catch (error) {
       console.error("Failed realtime camera");
     }
-    $: console.log("cameras", $cameras);
   </script>
   
