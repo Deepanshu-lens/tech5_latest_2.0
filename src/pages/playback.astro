@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import pb from "@/lib/pb";
-import PlaybackPanel from "@/components/playback/panel.svelte";
+import PlaybackLayout from "@/components/playback/layout.svelte";
 import CameraManager from "@/managers/camera.svelte";
 import NodeManager from "@/managers/node.svelte";
 
@@ -14,5 +14,5 @@ if (!pb.authStore.model) {
 <Layout title="LENS View | Playback" topbar>
   <CameraManager client:only="svelte" />
   <NodeManager client:only="svelte" />
-  <PlaybackPanel client:only="svelte" />
+  <PlaybackLayout client:only="svelte" />
 </Layout>
