@@ -13,6 +13,9 @@
 
   
     // Variables
+
+    $: console.log("cameras", $cameras);
+    $: console.log("selectedNode", $selectedNode);
     let availableChannels = writable<{ id: string; label: string }[]>([]);
     const currentTimeInterval = writable(0);
     let showRightPanel: boolean = true;
