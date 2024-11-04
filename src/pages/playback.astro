@@ -1,11 +1,14 @@
 ---
-import PageBar from "@/components/bars/PageBar.astro";
 import Layout from "@/layouts/Layout.astro";
 import pb from "@/lib/pb";
+import PlaybackPanel from "@/components/playback/panel.svelte";
+
 if (!pb.authStore.model) {
   console.error("No logged in user found. Redirect to login.");
   return Astro.redirect("/login");
 }
 ---
 
-<Layout title="LENS View | Playback" topbar />
+<Layout title="LENS View | Playback" topbar>
+  <PlaybackPanel client:only="svelte" />
+</Layout>
