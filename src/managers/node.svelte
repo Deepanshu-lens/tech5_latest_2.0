@@ -19,7 +19,6 @@
     // //   initCameraManager();
     try {
       pb.collection("node").subscribe("*", (e:any) => {
-        console.log("Node collection updated", e.action, e.record);
         if (e.action === "create") {
           nodes.update((current) => [...current, e.record]);
         } else if (e.action === "update") {

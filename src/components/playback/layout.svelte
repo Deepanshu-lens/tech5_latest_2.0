@@ -1,7 +1,7 @@
 <script lang="ts">
     // Imports
     import * as Tabs from "@/components/ui/tabs";
-    import { Play, Pause, ChevronRight } from "lucide-svelte";
+    import { Play, Pause, ChevronRight, ChevronLeft } from "lucide-svelte";
     import { selectedNode, cameras } from "@/stores";
     import { writable } from "svelte/store";
     import Hls from "hls.js";
@@ -10,6 +10,7 @@
     import { CalendarDaysIcon } from "lucide-svelte";
     import Button from "@/components/ui/button/button.svelte";
     import { cn } from "@/lib/utils";
+    import * as Pagination from "@/components/ui/pagination";
 
   
     // Variables
@@ -29,7 +30,9 @@
     let endTime: string = "";
     let videoPlayStates = writable<boolean[]>([]);
     let startTimeRange: number = 12;
-  
+    let currentPage = 0;
+    const videosPerPage = 8;
+
     //Constants
     const PLAYBACK_API_URL =
       "https://view.lenscorp.cloud/onlineplayback/generate-stream";
@@ -323,6 +326,32 @@
       });
     }
 
+    $: paginatedVideos = videoUrls.responses ? 
+        videoUrls.responses.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage) 
+        : [];
+
+    function handlePageChange(newPage: number) {
+        // Pause all videos on current page
+        videoRefs.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage)
+            .forEach((video, index) => {
+                if (video) {
+                    pauseVideo(currentPage * videosPerPage + index);
+                }
+            });
+        
+        currentPage = newPage - 1;
+        
+        // Play videos on new page after a short delay
+        setTimeout(() => {
+            videoRefs.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage)
+                .forEach((video, index) => {
+                    if (video) {
+                        playVideo(currentPage * videosPerPage + index);
+                    }
+                });
+        }, 100);
+    }
+
   </script>
   
   <section class="right-playback flex-1 flex w-full h-screen justify-between">
@@ -330,7 +359,7 @@
     <div class="w-full h-full">
       <div
         class={cn(
-          `grid gap-1 grid-cols-4 grid-rows-4 h-[62%] 2xl:h-[68%] w-full`,
+          `grid gap-1 grid-cols-4 grid-rows-4 h-[62%] 2xl:h-[68%] w-full relative`,
           videoUrls.responses.length === 1
             ? "grid-cols-1 grid-rows-1"
             : videoUrls.responses.length === 2
@@ -368,6 +397,26 @@
             <p class="font-semibold text-lg">No Playbacks Selected</p>
           </div>
         {/if}
+        {#if videoUrls.responses.length > videosPerPage}
+        <div class="absolute bottom-0 left-0 w-full flex justify-center mt-4 mb-2">
+          <Pagination.Root
+            count={videoUrls.responses.length}
+            perPage={videosPerPage}
+            siblingCount={1}
+            page={currentPage + 1}
+            on:change={(e) => handlePageChange(e.detail)}
+          >
+            <Pagination.Content>
+              <Pagination.Item>
+                <Pagination.PrevButton />
+              </Pagination.Item>
+              <Pagination.Item>
+                <Pagination.NextButton />
+              </Pagination.Item>
+            </Pagination.Content>
+          </Pagination.Root>
+        </div>
+      {/if}
       </div>
       {#if videoUrls.responses && videoUrls.responses.length > 0}
         <div class="flex flex-col col-span-2 px-5 gap-1">
