@@ -43,30 +43,23 @@
         };
         await pb.collection("atlas").create(panelDataToSubmit);
 
-showRightPanel = false;
-  toast.success("Panel added successfully");
-      } catch (error) {
+        showRightPanel = false;
+        toast.success("Panel added successfully");
+        } catch (error) {
         console.error("Error adding panel:", error);
         toast.error("Failed to add panel");
       }
     }
   
-    $: {
-      if ($activePanel) {
-        const activePanelData = $panels.find(
-          (panel:any) => panel.id === $activePanel,
-        );
-        if (activePanelData) {
-          doorList = activePanelData.expand.doors;
-          userList = activePanelData.expand.users;
-        }
+    $: if ($activePanel) {
+      const activePanelData = $panels.find(
+        (panel:any) => panel.id === $activePanel,
+      );
+      if (activePanelData) {
+        doorList = activePanelData.expand?.doors  || [];
+        userList = activePanelData.expand?.users || [];
       }
     }
-  
-    $: if($activePanel || $panels?.length > 0){
-      userList = $panels?.find((panel:any) => panel.id === $activePanel)?.expand?.users;
-      doorList = $panels?.find((panel:any) => panel.id === $activePanel)?.expand?.doors;
-     }
   
   </script>
   
@@ -247,7 +240,7 @@ showRightPanel = false;
         {:else}
           <div class="flex flex-col h-[calc(100vh-75px)]">
             <p class="text-center text-xl font-bold mb-4 text-brand-foreground dark:text-brand">
-              Atlas Panels
+              Atlas panels
             </p>
             <div
               class="flex flex-col gap-4 h-full pb-10 max-h-[calc(100vh-200px)] overflow-y-auto"

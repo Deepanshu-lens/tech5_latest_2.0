@@ -1,20 +1,21 @@
 <script lang="ts">
+    // Imports
     import * as Table from "@/components/ui/table/index";
-    import PocketBase from "pocketbase";
     import { writable } from "svelte/store";
+    import { Search } from "lucide-svelte";
     import EventMedia from "../dialoges/event-media.svelte";
     import Input from "@/components/ui/input/input.svelte";
-    import { Plus, Search, Trash2 } from "lucide-svelte";
     import { events } from "@/stores";
+
+    // Props & Stores
     export let search = writable<string>("");
-      
-    //select events logic
-    let allEventsSelected = false;
     let selectedEvents = writable<string[]>([]);
-  
+    let allEventsSelected = false;
+
+    // Selection logic
     $: allEventsSelected = $selectedEvents.length === $events.length;
-  
-    let toggleEventSelection = (eventId: string) => {
+
+    const toggleEventSelection = (eventId: string) => {
       if ($selectedEvents.includes(eventId)) {
         selectedEvents.update((events) => events.filter((id) => id !== eventId));
       } else {
@@ -29,15 +30,14 @@
         selectedEvents.set($events.map((event:any) => event.id));
       }
     };
-  
-    //select events logic ends
-  
+
+    // Search logic
     $: filteredData = $events?.filter((event:any) =>
       event.deviceName.toLowerCase().includes($search.toLowerCase()),
     );
-  </script>
-  
-  <div class="top-bar py-4 flex justify-between items-center">
+</script>
+
+<div class="top-bar py-4 flex justify-between items-center">
   
       <span class="flex flex-col gap-1">
         <span class="flex items-center gap-2">
@@ -58,47 +58,51 @@
         <Search size={18} class="absolute top-1/2 -translate-y-1/2 left-2" />
       </span>
   </div>
-  <Table.Root class="mx-auto w-full flex flex-col pb-10">
-    <Table.Header
-      class="border-2 border-[#e4e4e4] border-solid rounded-lg bg-[#f9f9f9] dark:bg-[#e4e4e4]/[.25] dark:border-none"
-    >
-      <Table.Row
-        class="bg-transparent flex items-center justify-between p-3 gap-4"
+  {#if filteredData.length === 0}
+    <div class="flex justify-center items-center h-full">
+      <p class="text-xl font-medium">No events to display</p>
+    </div>
+  {:else}
+    <Table.Root class="mx-auto w-full flex flex-col pb-10">
+      <Table.Header
+        class="border-2 border-[#e4e4e4] border-solid rounded-lg bg-[#f9f9f9] dark:bg-[#e4e4e4]/[.25] dark:border-none"
       >
-        <Table.Head class="text-[#727272] h-full text-sm text-medium"
-          ><input
-            type="checkbox"
-            checked={allEventsSelected}
-            on:change={toggleAllEventsSelection}
-          /></Table.Head
+        <Table.Row
+          class="bg-transparent flex items-center justify-between p-3 gap-4"
         >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >Event Category</Table.Head
-        >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >Description</Table.Head
-        >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >Device Name</Table.Head
-        >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >User</Table.Head
-        >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >Event images</Table.Head
-        >
-        <Table.Head
-          class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
-          >Priority</Table.Head
-        >
-      </Table.Row>
-    </Table.Header>
-    {#if filteredData.length !== 0}
+          <Table.Head class="text-[#727272] h-full text-sm text-medium"
+            ><input
+              type="checkbox"
+              checked={allEventsSelected}
+              on:change={toggleAllEventsSelection}
+            /></Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >Event Category</Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >Description</Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >Device Name</Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >User</Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >Event images</Table.Head
+          >
+          <Table.Head
+            class="text-[#727272] dark:text-[#FFFFFF]/70 h-full text-sm text-medium w-full"
+            >Priority</Table.Head
+          >
+        </Table.Row>
+      </Table.Header>
       <Table.Body
         class="overflow-y-scroll max-h-[calc(100vh-285px)] hide-scrollbar pb-10"
       >
@@ -106,7 +110,7 @@
           {@const event_typed = event as any}
           {@const color = event_typed.bgColor}
           {@const eventSelected = $selectedEvents.includes(event_typed.id)}
-  
+    
           <Table.Row
             class="bg-transparent cursor-pointer flex items-center justify-between gap-4 mt-4 px-3 rounded-lg  border-2 border-solid border-[#e4e4e4] dark:border-none dark:bg-[#e4e4e4]/[.13]"
             style="background-color: rgb({color?.red}, {color?.green}, {color?.blue});"
@@ -159,6 +163,5 @@
           </Table.Row>
         {/each}
       </Table.Body>
-    {/if}
-  </Table.Root>
-  
+    </Table.Root>
+  {/if}

@@ -6,11 +6,11 @@
       try {
         // Fetch initial data
         pb.autoCancellation(false);
-        const localPanels = await pb.collection("atlas").getFullList<any>({
+        const localpanels = await pb.collection("atlas").getFullList<any>({
             expand:"users,doors"
         });
-        panels.set(localPanels);
-        localPanels.length > 0 && activePanel.set(localPanels[0].id);
+        panels.set(localpanels);
+        localpanels.length > 0 && activePanel.set(localpanels[0].id);
     } catch (error) {
       console.error("Error initializing Panel Manager:", error);
     }
