@@ -327,27 +327,32 @@
         videoUrls.responses.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage) 
         : [];
 
-    function handlePageChange(newPage: number) {
-        // Pause all videos on current page
+        function handlePageChange(newPage: number) {
+    // Pause all videos except those on the current page
+    videoRefs.forEach((video, index) => {
+        if (video) {
+            // Calculate the page that each video belongs to
+            const videoPage = Math.floor(index / videosPerPage);
+            if (videoPage !== newPage - 1) {
+                pauseVideo(index); // Pause all videos not on the new page
+            }
+        }
+    });
+    
+    // Update the current page to the new page
+    currentPage = newPage - 1;
+
+    // After a short delay, play only the videos on the current page
+    setTimeout(() => {
         videoRefs.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage)
             .forEach((video, index) => {
                 if (video) {
-                    pauseVideo(currentPage * videosPerPage + index);
+                    playVideo(currentPage * videosPerPage + index);
                 }
             });
-        
-        currentPage = newPage - 1;
-        
-        // Play videos on new page after a short delay
-        setTimeout(() => {
-            videoRefs.slice(currentPage * videosPerPage, (currentPage + 1) * videosPerPage)
-                .forEach((video, index) => {
-                    if (video) {
-                        playVideo(currentPage * videosPerPage + index);
-                    }
-                });
-        }, 100);
-    }
+    }, 100);
+}
+
 
   </script>
   
