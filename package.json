@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "commit": "read -p \"Enter commit message: \" msg && git commit -m \"$msg\" && git push"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
