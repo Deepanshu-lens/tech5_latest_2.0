@@ -11,10 +11,12 @@
     import Button from "@/components/ui/button/button.svelte";
     import { cn } from "@/lib/utils";
     import * as Pagination from "@/components/ui/pagination";
+  import pb from "@/lib/pb";
 
   
     // Variables
     let availableChannels = writable<{ id: string; label: string }[]>([]);
+    let events: any[] = [];
     const currentTimeInterval = writable(0);
     let showRightPanel: boolean = true;
     const videos = writable([]);
@@ -23,6 +25,7 @@
     let showCalendar = writable<boolean>(false);
     let value: any = null;
     let searchDate = "";
+    let eventDate = "";
     let selectedChannels = writable<{ id: string; label: string }[]>([]);
     let videoUrls: any = { responses: [], cams: [] };
     let isLoading = writable<boolean>(false);
@@ -206,6 +209,7 @@
       const formattedDate = `${year}_${month.toString().padStart(2, "0")}_${day}`;
   
       try {
+        events = []
         const responses = await Promise.all(
           $selectedChannels.map(async (channel) => {
             const response = await fetch(PLAYBACK_API_URL, {
@@ -224,7 +228,30 @@
                   "Unknown error occurred"
               );
             }
-  
+            pb.autoCancellation(false);
+            const localEvents = await pb.collection("atlas_events").getFullList<any>({
+              filter: `camera="${channel.id}"`,
+              sort: "-created",
+              expand: "user",
+            });
+            // Filter events to match the selected date
+            const filteredEvents = localEvents.filter((event: any) => {
+              const eventUnixTime = new Date(event.created).getTime();
+              // Compare the dates by converting to start/end of day
+              const startOfDay = new Date(eventDate).getTime(); // Convert string to timestamp
+              const endOfDay = startOfDay + (24 * 60 * 60 * 1000);
+              return eventUnixTime >= startOfDay && eventUnixTime < endOfDay;
+            });
+
+            // Update events array with filtered results
+            const existingCameraIndex = events.findIndex(event => event.camera === channel.id);
+            if (existingCameraIndex !== -1) {
+              events[existingCameraIndex].events = filteredEvents;
+              events = [...events]; // Trigger reactivity
+            } else {
+              events = [...events, { events: filteredEvents, camera: channel.id }];
+            }
+
             const data = await response.json();
             return data.path;
           })
@@ -270,6 +297,16 @@
         month: "short",
         year: "numeric",
       });
+    }
+
+    $:if(value) {
+  const date = new Date(value.year, value.month - 1, value.day, 12, 0, 0);
+  
+  // Format using local timezone
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  eventDate = `${year}-${month}-${day}`;
     }
   
     $: if (searchDate) {
@@ -354,6 +391,33 @@
 }
 
 
+$: console.log("events from playback", events);
+$: console.log('event date', eventDate)
+
+    // Function to calculate positions of red strips
+    function calculateEventPositions(cameraId, eventsArray) {
+      if (!eventsArray || !eventsArray.length) return [];
+      
+      // Find events for this specific camera
+      const cameraEvents = eventsArray.find(item => item.camera === cameraId);
+      if (!cameraEvents || !cameraEvents.events) return [];
+      
+      return cameraEvents.events.map(event => {
+        const eventTime = new Date(event.created);
+        const hours = eventTime.getUTCHours();
+        const minutes = eventTime.getUTCMinutes();
+        
+        // Convert time to 10-minute interval index (0-143)
+        const intervalIndex = (hours * 6) + Math.floor(minutes / 10);
+        return (intervalIndex / 144) * 100;
+      });
+    }
+
+    // Debug reactive statement
+    $: if (events.length) {
+      console.log('Events:', events);
+      console.log('Calculated positions:', calculateEventPositions(videoUrls.cams[0].id, events));
+    }
   </script>
   
   <section class="right-playback flex-1 flex w-full h-screen justify-between">
@@ -488,11 +552,17 @@
                 </button>
               </div>
               <div
-                class="bg-white/10 w-[89%] 2xl:w-[90%] h-[95%] p-0 m-0 flex gap-1 pr-6 2xl:pr-7"
+                class="bg-white/10 w-[89%] 2xl:w-[90%] h-[95%] p-0 m-0 flex gap-1 pr-6 2xl:pr-7 relative"
                 style="background: linear-gradient(to right, #3F6C1C, #3F6C1C), rgba(255, 255, 255, 0.1); background-size: {$videoBackgroundWidths[
                   index
                 ]}% 100%; background-repeat: no-repeat;"
               >
+                {#each calculateEventPositions(cam.id, events) as position}
+                  <div
+                    class="absolute top-0 h-full w-[2px] bg-red-500"
+                    style="left: {position}%"
+                  />
+                {/each}
                 <input
                   type="range"
                   min="0"
@@ -742,6 +812,11 @@
       background: none;
       border: none;
       cursor: ew-resize;
+    }
+
+    /* Optional: Add transition for smooth updates */
+    div {
+      transition: all 0.3s ease;
     }
   </style>
   

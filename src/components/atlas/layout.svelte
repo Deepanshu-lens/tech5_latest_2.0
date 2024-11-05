@@ -60,7 +60,6 @@
         userList = activePanelData.expand?.users || [];
       }
     }
-  
   </script>
   
   <section
