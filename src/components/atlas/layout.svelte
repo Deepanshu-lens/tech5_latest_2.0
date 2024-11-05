@@ -117,7 +117,7 @@
             </span>
           </span>
         </div>
-        <div class="h-[calc(100vh-250px)]">
+        <div class="max-h-[70vh] overflow-y-auto">
           <Doors data={doorList} search={searchDoor} />
         </div>
       {/if}

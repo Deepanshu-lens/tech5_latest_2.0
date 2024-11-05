@@ -16,7 +16,6 @@ export const auth = {
   login: defineAction({
     input: loginSchema,
     handler: async (input, context) => {
-      console.log("INPUT: ", input);
       const { token, record } = await pb
         .collection("users")
         .authWithPassword(input.email, input.password)

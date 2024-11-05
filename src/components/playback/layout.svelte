@@ -201,8 +201,7 @@
   
       const dateParts = searchDate.split(" ");
       const day = dateParts[0].padStart(2, "0");
-      const month =
-        new Date(Date.parse(dateParts[1] + " 1, 2020")).getMonth() + 1;
+      const month = new Date(Date.parse(dateParts[1] + " 1, 2020")).getMonth() + 1;
       const year = dateParts[2];
       const formattedDate = `${year}_${month.toString().padStart(2, "0")}_${day}`;
   
@@ -211,9 +210,7 @@
           $selectedChannels.map(async (channel) => {
             const response = await fetch(PLAYBACK_API_URL, {
               method: "POST",
-              headers: {
-          "Content-Type": "application/json",
-      },
+              headers: {"Content-Type": "application/json"},
               body: JSON.stringify({
                 cameraID: channel.id,
                 cameraDate: formattedDate,
