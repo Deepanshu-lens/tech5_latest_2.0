@@ -114,7 +114,7 @@ export const user = {
           icon,
           link: title,
         }));
-      console.log(pages);
+      // console.log(pages);
       return pages;
     },
   }),

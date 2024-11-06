@@ -28,10 +28,10 @@ export const auth = {
         });
       // pb.authStore.save(token);
       context.cookies.set("pb_auth", pb.authStore.exportToCookie(), {
-        httpOnly: false, // Allows client-side access
+        httpOnly: true, // Allows client-side access
         path: "/", // Ensures it’s accessible across the site
         sameSite: "strict", // Prevents CSRF attacks by restricting cross-site requests
-        secure: false,
+        secure: true,
       });
       return {
         success: true,
