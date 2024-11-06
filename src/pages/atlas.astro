@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import pb from "@/lib/pb";
 import AtlasLayout from "@/components/atlas/layout.svelte";
 import AtlasManager from "@/managers/atlas.svelte";
-import EventsManager from "@/managers/events.svelte";
+import EventsManager from "@/managers/atlas-events.svelte";
 
 if (!pb.authStore.model) {
   console.error("No logged in user found. Redirect to login.");

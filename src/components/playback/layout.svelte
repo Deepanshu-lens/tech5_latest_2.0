@@ -1,17 +1,16 @@
 <script lang="ts">
     // Imports
     import * as Tabs from "@/components/ui/tabs";
-    import { Play, Pause, ChevronRight, ChevronLeft } from "lucide-svelte";
+    import { Play, Pause, ChevronRight, CalendarDaysIcon } from "lucide-svelte";
     import { selectedNode, cameras } from "@/stores";
     import { writable } from "svelte/store";
     import Hls from "hls.js";
     import { toast } from "svelte-sonner";
     import { Calendar } from "@/components/ui/calendar";
-    import { CalendarDaysIcon } from "lucide-svelte";
     import Button from "@/components/ui/button/button.svelte";
     import { cn } from "@/lib/utils";
     import * as Pagination from "@/components/ui/pagination";
-  import pb from "@/lib/pb";
+    import pb from "@/lib/pb";
 
   
     // Variables
@@ -35,6 +34,9 @@
     let startTimeRange: number = 12;
     let currentPage = 0;
     const videosPerPage = 8;
+
+    //todo: we are getting undefined as selected node in playback page
+    console.log('selected node', $selectedNode)
 
     //Constants
     const PLAYBACK_API_URL =

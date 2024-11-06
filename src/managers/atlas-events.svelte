@@ -1,6 +1,6 @@
 <script lang="ts">
   import pb from "@/lib/pb";
-  import { liveEvents } from "@/stores";
+  import { events } from "@/stores";
   import { toast } from "svelte-sonner";
   import { activePanel } from "@/stores";
 
@@ -8,11 +8,12 @@
     try {
       // Fetch initial data
       pb.autoCancellation(false);
-      const localEvents = await pb.collection("events").getFullList<any>({
+      const localEvents = await pb.collection("atlas_events").getFullList<any>({
+        filter: `pannels="${$activePanel}"`,
         sort: "-created",
-        fields: "title,frameImage",
+        expand: "user",
       });
-      liveEvents.set(localEvents);
+      events.set(localEvents);
       localEvents.length > 0;
     } catch (error) {
       console.error("Error initializing Panel Manager:", error);
@@ -20,23 +21,22 @@
   })();
 
   try {
-    pb.collection("events").subscribe("*", (e: any) => {
+    pb.collection("atlas_events").subscribe("*", (e: any) => {
       if (e.action === "create") {
-        liveEvents.update((current: any) => [...current, e.record]);
+        events.update((current: any) => [...current, e.record]);
         toast.success("New event created", {
           description: `${e.record.description} on ${e.record.deviceName}`,
         });
       } else if (e.action === "update") {
-        liveEvents.update((current: any) =>
+        events.update((current: any) =>
           current.map((cam: any) => (cam.id === e.record.id ? e.record : cam))
         );
       } else if (e.action === "delete") {
-        liveEvents.update((current: any) =>
+        events.update((current: any) =>
           current.filter((cam: any) => cam.id !== e.record.id)
         );
       }
-    });
-    ``;
+    });``
   } catch (error) {
     console.error("Failed realtime events");
   }
@@ -47,17 +47,18 @@
       try {
         // Fetch initial data
         pb.autoCancellation(false);
-        const localEvents = await pb.collection("events").getFullList<any>({
-          sort: "-created",
-          fields: "title,frameImage",
-        });
-        liveEvents.set(localEvents);
+        const localEvents = await pb
+          .collection("atlas_events")
+          .getFullList<any>({
+            filter: `pannels="${$activePanel}"`,
+            sort: "-created",
+            expand: "user",
+          });
+        events.set(localEvents);
         localEvents.length > 0;
       } catch (error) {
         console.error("Error initializing Panel Manager:", error);
       }
     })();
   }
-
-  $: console.log("liveEvents", $liveEvents);
 </script>
