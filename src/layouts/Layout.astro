@@ -38,6 +38,7 @@ const { title, topbar = true } = Astro.props;
       attributeFilter: ["class"],
     });
   }
+  $: console.log("selected node from layout", $selectedNode);
 </script>
 
 <html lang="en">

@@ -11,6 +11,7 @@
     import { cn } from "@/lib/utils";
     import * as Pagination from "@/components/ui/pagination";
     import pb from "@/lib/pb";
+  import { onMount } from "svelte";
 
   
     // Variables
@@ -34,9 +35,7 @@
     let startTimeRange: number = 12;
     let currentPage = 0;
     const videosPerPage = 8;
-
-    //todo: we are getting undefined as selected node in playback page
-    console.log('selected node', $selectedNode)
+    let isFetching = writable<boolean>(false);
 
     //Constants
     const PLAYBACK_API_URL =
@@ -204,6 +203,8 @@
         return;
       }
   
+      isFetching.set(true);
+  
       const dateParts = searchDate.split(" ");
       const day = dateParts[0].padStart(2, "0");
       const month = new Date(Date.parse(dateParts[1] + " 1, 2020")).getMonth() + 1;
@@ -212,6 +213,7 @@
   
       try {
         events = []
+        videoUrls = { responses: [], cams: [] };
         const responses = await Promise.all(
           $selectedChannels.map(async (channel) => {
             const response = await fetch(PLAYBACK_API_URL, {
@@ -263,6 +265,7 @@
       } catch (error) {
         console.error("Error fetching playback data:", error);
       } finally {
+        isFetching.set(false);
         selectedChannels.set([]);
         value = null;
         searchDate = "";
@@ -317,9 +320,10 @@
   
     $: if ($selectedNode) {
       isLoading.set(true);
-      const channel_list = $cameras
-        .filter((camera) => camera.save)
-        .map((camera) => ({ id: camera.id, label: camera.name }));
+      // const channel_list = $cameras
+      //   .filter((camera) => camera.save)
+      //   .map((camera) => ({ id: camera.id, label: camera.name }));
+      const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
       availableChannels.set(channel_list);
       isLoading.set(false);
     }
@@ -392,10 +396,6 @@
     }, 100);
 }
 
-
-$: console.log("events from playback", events);
-$: console.log('event date', eventDate)
-
     // Function to calculate positions of red strips
     function calculateEventPositions(cameraId, eventsArray) {
       if (!eventsArray || !eventsArray.length) return [];
@@ -419,6 +419,12 @@ $: console.log('event date', eventDate)
     $: if (events.length) {
       console.log('Events:', events);
       console.log('Calculated positions:', calculateEventPositions(videoUrls.cams[0].id, events));
+    }
+
+    $:{
+      if(videoUrls.responses.length > 0){
+        console.log("video urls", videoUrls);
+      }
     }
   </script>
   
@@ -683,9 +689,9 @@ $: console.log('event date', eventDate)
                 <Button
                   class="w-full py-2 text-sm font-medium mt-4 rounded-md"
                   on:click={fetchPlaybackData}
-                  disabled={$selectedChannels.length === 0 || !searchDate}
+                  disabled={$selectedChannels.length === 0 || !searchDate || $isFetching}
                 >
-                  Submit
+                  {$isFetching ? 'Fetching...' : 'Submit'}
                 </Button>
               </div>
             </Tabs.Content>
@@ -746,9 +752,9 @@ $: console.log('event date', eventDate)
                 <Button
                   class="w-full py-2 text-sm font-medium mt-4 rounded-md"
                   on:click={fetchPlaybackData}
-                  disabled={$selectedChannels.length === 0 || !searchDate}
+                  disabled={$selectedChannels.length === 0 || !searchDate || $isFetching}
                 >
-                  Submit
+                  {$isFetching ? 'Fetching...' : 'Submit'}
                 </Button>
               </div>
             </Tabs.Content>

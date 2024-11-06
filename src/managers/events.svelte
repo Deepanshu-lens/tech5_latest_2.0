@@ -9,8 +9,7 @@
       // Fetch initial data
       pb.autoCancellation(false);
       const localEvents = await pb.collection("events").getFullList<any>({
-        sort: "-created",
-        fields: "title,frameImage",
+        sort: "created",
       });
       liveEvents.set(localEvents);
       localEvents.length > 0;
@@ -59,5 +58,4 @@
     })();
   }
 
-  $: console.log("liveEvents", $liveEvents);
 </script>
