@@ -1,8 +1,12 @@
 ---
-import StreamLayout from "@/components/streams/StreamLayout.astro";
+import StreamLayout from "@/components/live/streams/StreamLayout.svelte";
+import CameraList from "@/components/live/cameraList/CameraList.svelte";
 import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="LENS View">
-  <StreamLayout server:defer />
+  <div class="flex flex-row">
+    <StreamLayout client:only="svelte" />
+    <CameraList client:only="svelte" />
+  </div>
 </Layout>

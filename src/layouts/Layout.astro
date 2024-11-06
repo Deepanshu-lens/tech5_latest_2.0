@@ -1,12 +1,11 @@
 ---
 import "@/styles/globals.css";
-import { ModeWatcher } from "mode-watcher";
-import { Toaster } from "@/components/ui/sonner";
+// import { ModeWatcher } from "mode-watcher";
+// import { Toaster } from "@/components/ui/sonner";
 import User from "@/managers/User.svelte";
+import Camera from "@/managers/Camera.svelte";
+import Node from "@/managers/Node.svelte";
 import PageBar from "@/components/bars/PageBar.astro";
-import CameraManager from "@/managers/camera.svelte";
-import NodeManager from "@/managers/node.svelte";
-import pb from "@/lib/pb";
 
 interface Props {
   title: string;
@@ -16,7 +15,7 @@ interface Props {
 const { title, topbar = true } = Astro.props;
 ---
 
-<script is:inline>
+<!-- <script is:inline>
   const isBrowser = typeof localStorage !== "undefined";
   const getThemePreference = () => {
     if (isBrowser && localStorage.getItem("theme")) {
@@ -39,8 +38,7 @@ const { title, topbar = true } = Astro.props;
       attributeFilter: ["class"],
     });
   }
-</script>
-
+</script> -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -50,12 +48,12 @@ const { title, topbar = true } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="antialiased">
-    <ModeWatcher client:load />
-    <CameraManager client:only="svelte" />
-  <NodeManager client:only="svelte" />
+    <!-- <ModeWatcher client:load /> -->
     <User client:only="svelte" />
+    <Node client:only="svelte" />
+    <Camera client:only="svelte" />
     {topbar && <PageBar location="top" />}
-    <Toaster client:only="svelte" />
+    <!-- <Toaster client:only="svelte" /> -->
     <slot />
   </body>
 </html>

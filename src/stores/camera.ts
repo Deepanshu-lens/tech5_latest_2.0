@@ -1,5 +1,4 @@
-import { validateCameras } from "@/actions/auth/validateSchemas";
-import type { Camera } from "@/types";
+import { validateCameras, type Camera } from "@/types";
 import { writable } from "svelte/store";
 
 const createCameraStore = () => {
@@ -20,3 +19,4 @@ const createCameraStore = () => {
 };
 
 export const cameras = createCameraStore();
+export const totalCameras = writable<number>(0);

@@ -1,7 +1,16 @@
 import { user } from "./user";
-import { cameras } from "./cameras";
-import { nodes, selectedNode } from "./nodes";
+import { cameras, totalCameras } from "./camera";
+import { selectedNode, nodes } from "./node";
 import { activePanel, panels } from "./panels";
 import { events } from "./events";
 
-export { user, cameras, nodes, selectedNode, activePanel, panels, events };
+export {
+  user,
+  cameras,
+  totalCameras,
+  selectedNode,
+  nodes,
+  activePanel,
+  panels,
+  events,
+};
