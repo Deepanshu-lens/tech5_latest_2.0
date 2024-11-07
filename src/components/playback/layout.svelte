@@ -1,7 +1,5 @@
 <script lang="ts">
     // Imports
-    import {getCameras} from "@/managers/get-camera.ts";
-    import NodeSelection from "@/components/node/NodeSelection.svelte";
     import * as Tabs from "@/components/ui/tabs";
     import { Play, Pause, ChevronRight, CalendarDaysIcon } from "lucide-svelte";
     import { selectedNode, cameras } from "@/stores";
@@ -315,7 +313,6 @@
     $: if ($selectedNode) {
       isLoading.set(true);
       const channel_list = $cameras
-        .filter((camera) => camera.save)
         .map((camera) => ({ id: camera.id, label: camera.name }));
       // const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
       availableChannels.set(channel_list);
@@ -389,12 +386,13 @@
             });
     }, 100);
 }
+
     // Function to calculate positions of red strips
-    function calculateEventPositions(cameraId: any, eventsArray: any[]) {
+    function calculateEventPositions(cameraId, eventsArray) {
       if (!eventsArray || !eventsArray.length) return [];
       
       // Find events for this specific camera
-      const cameraEvents = eventsArray.find((item: any) => item.camera === cameraId);
+      const cameraEvents = eventsArray.find(item => item.camera === cameraId);
       if (!cameraEvents || !cameraEvents.events) return [];
       
       return cameraEvents.events.map(event => {
@@ -408,14 +406,7 @@
       });
     }
 
-    //todo: find something better than this
-    let previousNode: string | null = null;
-    $: if ($selectedNode && $selectedNode !== previousNode) {
-        getCameras($selectedNode);
-        previousNode = $selectedNode;
-        console.log("selected node from playback", $cameras);
-    }
-
+ 
   </script>
   
   <section class="right-playback flex-1 flex w-full h-screen justify-between">
@@ -593,7 +584,6 @@
         class={`${showRightPanel ? "opacity-100" : "opacity-0"} transtion-opacity ease-in-out duration-500 `}
       >
         <div class="px-4 py-4 flex flex-col gap-1">
-          <NodeSelection />
           <Tabs.Root value="byDate">
             <Tabs.List
               class="w-full bg-white dark:bg-white/10 text-black dark:text-white border mb-4"
