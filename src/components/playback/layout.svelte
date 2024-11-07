@@ -12,6 +12,8 @@
     import * as Pagination from "@/components/ui/pagination";
     import pb from "@/lib/pb";
   import { onMount } from "svelte";
+  import NodeSelection from "../node/NodeSelection.svelte";
+  import { getCameras } from "@/managers/get-camera";
 
   
     // Variables
@@ -313,6 +315,7 @@
     $: if ($selectedNode) {
       isLoading.set(true);
       const channel_list = $cameras
+        .filter((camera) => camera.save)
         .map((camera) => ({ id: camera.id, label: camera.name }));
       // const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
       availableChannels.set(channel_list);
@@ -406,6 +409,11 @@
       });
     }
 
+    let previousNode: string | null = null;
+    $: if ($selectedNode && $selectedNode !== previousNode) {
+      getCameras($selectedNode);
+        previousNode = $selectedNode;
+    }
  
   </script>
   
@@ -583,6 +591,7 @@
       <div
         class={`${showRightPanel ? "opacity-100" : "opacity-0"} transtion-opacity ease-in-out duration-500 `}
       >
+      <NodeSelection/>
         <div class="px-4 py-4 flex flex-col gap-1">
           <Tabs.Root value="byDate">
             <Tabs.List
