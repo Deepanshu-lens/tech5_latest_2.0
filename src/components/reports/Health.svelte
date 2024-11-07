@@ -35,7 +35,7 @@
 
   const PB: PocketBase = new PocketBase();
 
-  let view = 1;
+  let view = 3;
 
   import AreaAnalysis from "./charts/AreaAnalysis.svelte";
   import { Input } from "../ui/input";

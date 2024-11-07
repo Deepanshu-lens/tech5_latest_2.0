@@ -22,7 +22,7 @@
   import { writable } from "svelte/store";
   const PB = new PocketBase(`https://pocketbase.lenscorp.cloud`);
 
-  let selectedScreen = writable(5);
+  let selectedScreen = writable(1);
   export let data: PageServerData;
   const session = data?.session;
   let nodes: Node[] = [];
