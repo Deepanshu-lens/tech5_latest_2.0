@@ -14,7 +14,6 @@
 
   try {
     pb.collection("users").subscribe("*", (e) => {
-      console.log("User collection updated", e.action, e.record);
       if (e.action === "update") {
         const validated = validateUser(e.record);
         if (validated)

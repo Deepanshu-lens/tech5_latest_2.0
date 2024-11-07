@@ -9,29 +9,29 @@ export const userSchema = z.object({
   session: z.array(z.string()),
 });
 
-export const cameraSchema = z.lazy(() =>
-  z.object({
-    id: z.string(),
-    name: z.string().min(1, "Camera name is required."),
-    url: z.string().url("Invalid URL"),
-    subUrl: z.any(),
-    save: z.boolean(),
-    // subUrl: z.string().url("Invalid URL").nullable().optional(),
-    // node: nodeSchema,
-  })
-);
+// export const cameraSchema = z.lazy(() =>
+//   z.object({
+//     id: z.string(),
+//     name: z.string().min(1, "Camera name is required."),
+//     url: z.string().url("Invalid URL"),
+//     subUrl: z.any(),
+//     save: z.boolean(),
+//     // subUrl: z.string().url("Invalid URL").nullable().optional(),
+//     // node: nodeSchema,
+//   })
+// );
 
-export const nodeSchema = z.lazy(() =>
-  z.object({
-    id: z.string(),
-    name: z.string().min(1, "Camera name is required."),
-    cameras: z.array(z.string()).optional(),
-  })
-);
+// export const nodeSchema = z.lazy(() =>
+//   z.object({
+//     id: z.string(),
+//     name: z.string().min(1, "Camera name is required."),
+//     cameras: z.array(z.string()).optional(),
+//   })
+// );
 
-export type User = z.infer<typeof userSchema>;
-export type Camera = z.infer<typeof cameraSchema>;
-export type Node = z.infer<typeof nodeSchema>;
+// export type User = z.infer<typeof userSchema>;
+// export type Camera = z.infer<typeof cameraSchema>;
+// export type Node = z.infer<typeof nodeSchema>;
 
 export const validateUser = (data: any): User | null => {
   if (!data) return null;
@@ -74,3 +74,27 @@ export const validateNode = (data: unknown): Node | null => {
 export const validateNodes = (data: unknown[]): Node[] => {
   return data.map(validateNode).filter((node): node is Node => node !== null);
 };
+
+export const cameraSchema = z.lazy(() =>
+  z.object({
+    id: z.string(),
+    name: z.string().min(1, "Camera name is required."),
+    url: z.string().url("Invalid URL"),
+    subUrl: z.any(),
+    save: z.boolean(),
+    // subUrl: z.string().url("Invalid URL").nullable().optional(),
+    // node: nodeSchema,
+  })
+);
+
+export const nodeSchema = z.lazy(() =>
+  z.object({
+    id: z.string(),
+    name: z.string().min(1, "Camera name is required."),
+    cameras: z.array(z.string()).optional(),
+  })
+);
+
+export type User = z.infer<typeof userSchema>;
+export type Camera = z.infer<typeof cameraSchema>;
+export type Node = z.infer<typeof nodeSchema>;

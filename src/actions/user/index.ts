@@ -11,6 +11,7 @@ const pageOrder = [
   { title: "events", icon: "mdi:bell-outline" },
   { title: "gallery", icon: "clarity:image-gallery-line" },
   { title: "reports", icon: "lucide:chart-line" },
+  { title: "atlas", icon: "lucide:map" },
   { title: "settings", icon: "material-symbols:settings-outline" },
 ];
 
@@ -63,7 +64,7 @@ export const user = {
         filter: `user = "${pb.authStore.model?.id}"`,
         expand: "bundles.feature",
       });
-      // console.log(licenseForUser);
+      console.log("licenseForUser", licenseForUser);
       if (!licenseForUser || licenseForUser.length === 0) {
         console.error("No license found for this user");
         throw new ActionError({
@@ -114,7 +115,6 @@ export const user = {
           icon,
           link: title,
         }));
-      // console.log(pages);
       return pages;
     },
   }),

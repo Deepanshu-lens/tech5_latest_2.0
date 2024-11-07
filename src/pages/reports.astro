@@ -1,0 +1,10 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ReportsManager from "@/managers/reports.svelte";
+---
+
+<Layout title="LENS View">
+  <div class="flex flex-row">
+    <ReportsManager client:only="svelte"/>
+  </div>
+</Layout>

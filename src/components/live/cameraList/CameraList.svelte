@@ -40,9 +40,9 @@
   }
 </script>
 
-<section class=" border-l overflow-y-auto">
-  <div class=" w-full p-2 px-4">
-    <div class={`flex  justify-between items-center gap-4 w-full`}>
+<section class="border-l overflow-y-auto">
+  <div class="w-full p-2 px-4">
+    <div class={`flex justify-between items-center gap-4 w-full`}>
       <NodeSelection />
       <div class={cn("flex items-center", "space-x-2")}>
         <NodeActionButton action="add" />

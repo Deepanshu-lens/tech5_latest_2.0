@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import pb from "@/lib/pb";
+import AtlasLayout from "@/components/atlas/layout.svelte";
+import AtlasManager from "@/managers/atlas.svelte";
+import EventsManager from "@/managers/atlas-events.svelte";
+
+if (!pb.authStore.model) {
+  console.error("No logged in user found. Redirect to login.");
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="LENS View | Atlas" topbar>
+  <AtlasManager client:only="svelte" />
+  <EventsManager client:only="svelte" />
+  <AtlasLayout client:only="svelte" />
+</Layout>
