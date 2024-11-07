@@ -55,13 +55,11 @@
     }
   
     function handlePlayed(e: any) {
-      if (typeof e.currentSrc !== "undefined") {
-        console.log("video play", { video: e.currentSrc });
-      }
+      // Remove console.log only
     }
   
     function handleEnded(e: any) {
-      console.log("video end", { video: e.currentSrc });
+      // Remove console.log only
     }
   
     function syncPlayState(index: number, isPlaying: boolean) {
@@ -238,20 +236,17 @@
               sort: "-created",
               expand: "user",
             });
-            // Filter events to match the selected date
             const filteredEvents = localEvents.filter((event: any) => {
               const eventUnixTime = new Date(event.created).getTime();
-              // Compare the dates by converting to start/end of day
-              const startOfDay = new Date(eventDate).getTime(); // Convert string to timestamp
+              const startOfDay = new Date(eventDate).getTime(); 
               const endOfDay = startOfDay + (24 * 60 * 60 * 1000);
               return eventUnixTime >= startOfDay && eventUnixTime < endOfDay;
             });
 
-            // Update events array with filtered results
             const existingCameraIndex = events.findIndex(event => event.camera === channel.id);
             if (existingCameraIndex !== -1) {
               events[existingCameraIndex].events = filteredEvents;
-              events = [...events]; // Trigger reactivity
+              events = [...events];
             } else {
               events = [...events, { events: filteredEvents, camera: channel.id }];
             }
@@ -273,7 +268,6 @@
     }
   
     function toggleCalendar() {
-      // Toggle the calendar's visibility
       showCalendar.update((currentValue) => !currentValue);
     }
   
@@ -296,7 +290,6 @@
     $: if (value) {
       const date = new Date(value.year, value.month - 1, value.day);
   
-      // Format the date as "DD MONTH YYYY"
       searchDate = date.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
@@ -307,7 +300,6 @@
     $:if(value) {
   const date = new Date(value.year, value.month - 1, value.day, 12, 0, 0);
   
-  // Format using local timezone
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -320,10 +312,9 @@
   
     $: if ($selectedNode) {
       isLoading.set(true);
-      // const channel_list = $cameras
-      //   .filter((camera) => camera.save)
-      //   .map((camera) => ({ id: camera.id, label: camera.name }));
-      const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
+      const channel_list = $cameras
+        .map((camera) => ({ id: camera.id, label: camera.name }));
+      // const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
       availableChannels.set(channel_list);
       isLoading.set(false);
     }
@@ -415,17 +406,7 @@
       });
     }
 
-    // Debug reactive statement
-    $: if (events.length) {
-      console.log('Events:', events);
-      console.log('Calculated positions:', calculateEventPositions(videoUrls.cams[0].id, events));
-    }
-
-    $:{
-      if(videoUrls.responses.length > 0){
-        console.log("video urls", videoUrls);
-      }
-    }
+ 
   </script>
   
   <section class="right-playback flex-1 flex w-full h-screen justify-between">
