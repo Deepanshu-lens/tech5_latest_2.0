@@ -1,5 +1,4 @@
 ---
-import pb from "@/lib/pb";
 import Avatar from "../avatar/Avatar.astro";
 import PageBarItems from "./PageBarItems.astro";
 import { user } from "@/stores";
@@ -37,7 +36,7 @@ const isVertical = location === "left" || location === "right";
     class=`${isVertical?"flex flex-col space-y-4 flex-grow justify-center w-full" : "flex flex-grow justify-center"}`
   >
     <PageBarItems {isVertical} server:defer>
-      <div slot="fallback">Page Bar Items</div>
+      <div slot="fallback">Loading...</div>
     </PageBarItems>
   </nav>
 
