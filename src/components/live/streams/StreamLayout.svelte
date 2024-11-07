@@ -1,9 +1,9 @@
 <script>
-  import { onMount } from "svelte";
   import { cameras, totalCameras } from "@/stores";
   import StreamTile from "./StreamTile.svelte";
-  import { writable, derived } from "svelte/store";
   import Pagination from "./pagination/Pagination.svelte";
+
+ 
 
   const MAX_CAMERAS_PER_PAGE = 9;
 
@@ -28,7 +28,6 @@
 
   // Reactive statement to calculate the grid style dynamically
   $: gridStyle = getGridStyle($cameras.length);
-  $: console.log("Camera changed", $cameras);
 </script>
 
 <div class="flex flex-col flex-grow">
