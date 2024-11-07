@@ -6,17 +6,27 @@
   (async () => {
     try {
       // Fetch initial data
-      const localNodes = await pb.collection("node").getFullList<Node>({
+      let baseFilter = `session.id?="${pb.authStore.model.session[0]}"`;
+      let localNodes = await pb.collection("node").getFullList<Node>({
         fields: "id,name",
-        filter: `session.id?="${pb.authStore.model.session[0]}"`,
+        filter: baseFilter,
         sort: "-created",
       });
       nodes.set(localNodes);
-      localNodes.length > 0 && selectedNode.set(localNodes[0].id);
+      console.log(localStorage.getItem("selectedNode"));
+      localNodes.length > 0 && localStorage.getItem("selectedNode")
+        ? selectedNode.set(localStorage.getItem("selectedNode"))
+        : selectedNode.set(localNodes[0].id);
     } catch (error) {
       console.error("Error initializing Camera Manager:", error);
     }
   })();
+
+  $: if ($selectedNode) {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("selectedNode", String($selectedNode));
+    }
+  }
 
   // //   initCameraManager();
   try {

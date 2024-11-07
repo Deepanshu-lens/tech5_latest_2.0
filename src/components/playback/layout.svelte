@@ -2,7 +2,7 @@
     // Imports
     import * as Tabs from "@/components/ui/tabs";
     import { Play, Pause, ChevronRight, CalendarDaysIcon } from "lucide-svelte";
-    import { selectedNode, cameras } from "@/stores";
+    import { selectedNode } from "@/stores";
     import { writable } from "svelte/store";
     import Hls from "hls.js";
     import { toast } from "svelte-sonner";
@@ -15,7 +15,7 @@
   import NodeSelection from "../node/NodeSelection.svelte";
   import { getCameras } from "@/managers/get-camera";
 
-  
+    
     // Variables
     let availableChannels = writable<{ id: string; label: string }[]>([]);
     let events: any[] = [];
@@ -228,7 +228,7 @@
             if (!response.ok) {
               const errorData = await response.json();
               toast.error(
-                `${errorData.error} for ${channel.label}` ||
+                `${errorData.error} for ${channel.name}` ||
                   "Unknown error occurred"
               );
             }
@@ -312,15 +312,16 @@
       showCalendar.update((currentValue) => !currentValue);
     }
   
-    $: if ($selectedNode) {
-      isLoading.set(true);
-      const channel_list = $cameras
-        .filter((camera) => camera.save)
-        .map((camera) => ({ id: camera.id, label: camera.name }));
-      // const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
-      availableChannels.set(channel_list);
-      isLoading.set(false);
-    }
+    // $: if ($selectedNode) {
+    //   isLoading.set(true);
+    //   console.log(cameras);
+    //   const channel_list = cameras
+    //     .filter((camera) => camera.save)
+    //     .map((camera) => ({ id: camera.id, label: camera.name }));
+    //   // const channel_list = [{id: "vdgi9n1t1iru7sw", label: "nvrCam 1"},{id: "h7qklv8zk1v9uf2", label: "nvrCam 2"},{id: "uqvadixbm65ior5", label: "nvrCam 6"},{id: "3mmfkxip4crwx4s", label: "nvrCam 9"}]
+    //   availableChannels.set(channel_list);
+    //   isLoading.set(false);
+    // }
   
     $: if (startTime) {
       const [hours, minutes] = startTime.split(":").map(Number);
@@ -411,8 +412,14 @@
 
     let previousNode: string | null = null;
     $: if ($selectedNode && $selectedNode !== previousNode) {
-      getCameras($selectedNode);
-        previousNode = $selectedNode;
+      console.log("Getting previous cams", $selectedNode);
+      isLoading.set(true);
+      getCameras($selectedNode).then((cameras) => {
+        console.log("c", cameras);
+        availableChannels.set(cameras);
+        isLoading.set(false);
+         previousNode = $selectedNode;
+      })
     }
  
   </script>
@@ -532,7 +539,7 @@
                 <p
                   class="text-xs 2xl:text-sm font-semibold mr-3 truncate min-w-[50px]"
                 >
-                  {cam.label}
+                  {cam.name}
                 </p>
                 <button on:click={() => togglePlayPause(index)}>
                   {#if $videoPlayStates[index]}
@@ -639,7 +646,7 @@
                         $selectedChannels.length === 8 &&
                           !$selectedChannels.includes(channel) &&
                           "text-gray-400"
-                      )}>{channel.label}</label
+                      )}>{channel.name}</label
                     >
                   </div>
                 {/each}

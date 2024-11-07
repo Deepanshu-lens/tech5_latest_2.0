@@ -18,7 +18,9 @@
     }
   };
 
-  $: if ($selectedNode) getInitialCameras($selectedNode);
+  $: if ($selectedNode) {
+    getInitialCameras($selectedNode);
+  }
 
   try {
     pb.collection("camera").subscribe("*", (e) => {

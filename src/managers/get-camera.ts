@@ -4,13 +4,14 @@ import { cameras, totalCameras } from "@/stores";
 
 export const getCameras = async (nodeId: string) => {
   try {
+    console.log("Node:", nodeId);
+    pb.autoCancellation(false);
     const localCameras = await pb.collection("camera").getFullList<Camera>({
-      fields: "id,name,url,subUrl,save",
+      fields: "id,name",
       filter: `node.id ?= "${nodeId}" && save = true`,
       sort: "-created",
     });
-    cameras.set(localCameras);
-    totalCameras.set(localCameras.length);
+    return localCameras;
   } catch (error) {
     console.error("Error initializing Camera Manager:", error);
   }
