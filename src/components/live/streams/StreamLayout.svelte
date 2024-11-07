@@ -3,7 +3,7 @@
   import StreamTile from "./StreamTile.svelte";
   import Pagination from "./pagination/Pagination.svelte";
 
-  $:console.log("cameras in stream layout", $cameras);
+ 
 
   const MAX_CAMERAS_PER_PAGE = 9;
 
