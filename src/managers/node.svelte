@@ -8,6 +8,7 @@
       // Fetch initial data
       const localNodes = await pb.collection("node").getFullList<Node>({
         fields: "id,name",
+        filter: `session.id?="${pb.authStore.model.session[0]}"`,
         sort: "-created",
       });
       nodes.set(localNodes);
