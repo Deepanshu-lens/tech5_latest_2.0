@@ -4,8 +4,12 @@ import CameraList from "@/components/live/cameraList/CameraList.svelte";
 import Layout from "@/layouts/Layout.astro";
 import LiveRightSection from "@/components/live/live-right-section.svelte";
 import EventsManager from "@/managers/events.svelte";
+import Camera from "@/managers/Camera.svelte";
+import Node from "@/managers/Node.svelte";
 ---
 
+<Node client:only="svelte" />
+<Camera client:only="svelte" />
 <Layout title="LENS View">
   <div class="flex flex-row">
     <EventsManager client:only="svelte" />
