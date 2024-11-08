@@ -1,6 +1,6 @@
 ---
 import { actions } from "astro:actions";
-const { data, error } = await Astro.callAction(actions.user.avatar, []);
+const { data } = await Astro.callAction(actions.user.avatar, []);
 const { isVertical } = Astro.props;
 const MAX_NAME_LENGTH = 20;
 const MAX_EMAIL_LENGTH = 30;
