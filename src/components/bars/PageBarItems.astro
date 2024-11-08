@@ -2,7 +2,7 @@
 import { actions } from "astro:actions";
 import { Icon } from "astro-icon/components";
 const { isVertical } = Astro.props;
-const { data, error } = await Astro.callAction(actions.user.pages, []);
+const { data } = await Astro.callAction(actions.user.pages, []);
 const referer = Astro.request.headers.get("Referer") || "";
 ---
 
