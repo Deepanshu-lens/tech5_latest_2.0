@@ -38,4 +38,10 @@ export const auth = {
       };
     },
   }),
+  logout: defineAction({
+    handler: async (input, context) => {
+      pb.authStore.clear();
+      context.cookies.delete("pb_auth", { path: "/" });
+    },
+  }),
 };

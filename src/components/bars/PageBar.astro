@@ -1,5 +1,6 @@
 ---
 import Avatar from "../avatar/Avatar.astro";
+import Profile from "../avatar/Profile.astro";
 import PageBarItems from "./PageBarItems.astro";
 import { user } from "@/stores";
 
@@ -42,6 +43,6 @@ const isVertical = location === "left" || location === "right";
 
   <!-- User Information at the Bottom for Vertical Layouts -->
   <div class=`${isVertical ? "mt-auto" : ""} flex items-center space-x-2`>
-    <Avatar {isVertical} server:defer />
+    <Profile {isVertical}  server:defer/>
   </div>
 </header>

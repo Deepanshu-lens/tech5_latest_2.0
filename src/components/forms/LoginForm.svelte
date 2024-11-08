@@ -24,7 +24,6 @@
       password: "",
     };
     if (result.error) {
-      console.log("TOAST");
       if (!isInputError(result.error)) {
         toast.error(result.error.message);
       } else {

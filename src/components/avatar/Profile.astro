@@ -1,5 +1,8 @@
 ---
 import { actions } from "astro:actions";
+import NavbarProfileManager from "@/managers/navbar-profile.svelte";
+// import pb from "@/lib/sharedPB";
+
 const { data, error } = await Astro.callAction(actions.user.avatar, []);
 const { isVertical } = Astro.props;
 const MAX_NAME_LENGTH = 20;
@@ -18,21 +21,4 @@ if (data?.user.email.length > MAX_EMAIL_LENGTH) {
 }
 ---
 
-{
-  data?.success && (
-    <button class="flex items-center space-x-3 hover:bg-accent py-1.5 px-2 rounded-md">
-      <img
-        src={data?.avatar}
-        alt="User Avatar"
-        class="rounded-lg"
-        width={isVertical ? 64 : 36}
-      />
-      {!isVertical && data.user && (
-        <div class="space-y-0 flex-col flex items-start">
-          <span class="text-sm ">{displayName}</span>
-          <span class="text-xs">{displayEmail}</span>
-        </div>
-      )}
-    </button>
-  )
-}
+<NavbarProfileManager client:only="svelte" {displayName} {displayEmail} {isVertical} {data}/>
