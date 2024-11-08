@@ -436,7 +436,7 @@
                     <h2 class="text-xl font-bold">Add Camera</h2>
                   </div>
                   <div
-                    class="flex items-center justify-center rounded-lg dark:border-neutral-400 border-black border-solid border-[1px] p-1 w-[200px] h-[40px] mx-auto"
+                    class="flex items-center justify-center rounded-lg dark:border-neutral-700 border-black border-solid border-[1px] p-1 w-[200px] h-[40px] mx-auto"
                   >
                     <button
                       on:click={() => (addDevice = 1)}

@@ -1,5 +1,5 @@
 <script type="ts">
-    import { selectedNode } from "@/stores";
+  import { selectedNode } from "@/stores";
   import { onMount } from "svelte";
   // import { addUserLog } from "@/lib/addUserLog";
   import * as Tabs from "@/components/ui/tabs";
@@ -44,24 +44,17 @@
     class="w-[94.5%] mx-6 shadow-none"
   >
     <Tabs.List
-      class="h-[2.5rem] grid w-56 mx-auto border-neutral-200 grid-cols-2 shadow-none bg-white border"
+      class="h-[2.5rem] grid w-56 mx-auto  grid-cols-2 shadow-none  border"
     >
-      <Tabs.Trigger
-        value="live"
-        class="data-[state=active]:bg-primary data-[state=active]:text-white"
-        >Live</Tabs.Trigger
-      >
-      <Tabs.Trigger
-        value="resolution"
-        class="data-[state=active]:bg-primary data-[state=active]:text-white"
-        >Resolution</Tabs.Trigger
-      >
+      <Tabs.Trigger value="live">Live</Tabs.Trigger>
+      <Tabs.Trigger value="resolution">Resolution</Tabs.Trigger>
     </Tabs.List>
     <Tabs.Content value="live" class="mt-4">
       <div
         class="w-full pt-8 shad border-black/[.08] border-[1px] border-solid mb-12"
       >
         <h2 class="px-6 font-medium mb-4">Stream delay duration</h2>
+        <!-- svelte-ignore element_invalid_self_closing_tag -->
         <div
           class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
         />

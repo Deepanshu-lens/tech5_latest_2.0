@@ -106,7 +106,7 @@
       }
       const result = await data.json();
       nodeData.set(
-        result?.nodeData.map((node) => ({ ...node, session: user.session })),
+        result?.nodeData.map((node) => ({ ...node, session: user.session }))
       );
     } else {
       console.log("no selected node");
@@ -142,7 +142,7 @@
       }),
     }).then(() => {
       localCameraList.map((c) =>
-        document.getElementById(`stream-${c.id}`)?.remove(),
+        document.getElementById(`stream-${c.id}`)?.remove()
       );
       toast(`Node: ${$nodeData[nodeIndex].name} deleted!`);
     });
@@ -174,7 +174,7 @@
 >
   <!-- Selecting Tabs -->
   <div
-    class="flex items-center justify-center rounded-lg border-black/[.13] border-solid border-[1px] p-1 w-[600px] max-h-[50px] h-[50px] mx-auto mb-10"
+    class="flex items-center justify-center rounded-lg border-black/[.13] dark:border-neutral-700 border-solid border-[1px] p-1 w-[600px] max-h-[50px] h-[50px] mx-auto mb-10"
   >
     <button
       on:click={() => (selected = 1)}
@@ -354,10 +354,8 @@
                 on:click={() => {
                   if (nodeIndex !== undefined && nodeIndex !== null) {
                     nodeModify = true;
-               
                   } else {
                     alert("please select a node");
-                
                   }
                 }}
               >
@@ -382,7 +380,7 @@
                     return;
                   });
                   toast(
-                    `${newData[nodeIndex].name} updated to ${newNodeName}!`,
+                    `${newData[nodeIndex].name} updated to ${newNodeName}!`
                   );
                   newData[nodeIndex].name = newNodeName;
                   nodeModify = false;
@@ -400,24 +398,22 @@
               </button>
             {/if}
             <!-- <AlertDeleteNode onDelete={onDeleteNode}> -->
-              <Button
-                disabled={nodeIndex === null}
-                variant="outline"
-                size="sm"
-                class={"disabled:cursor-not-allowed border-none flex text-xs items-center gap-2 font-medium rounded-3xl border text-red-500 border-red-200 hover:bg-red-100 bg-red-50"}
-                on:click={() => {
-                  if (nodeIndex !== undefined && nodeIndex !== null) {
-                    nodeModify = true;
-                 
-                  } else {
-                    alert("please select a node");
-               
-                  }
-                }}
-              >
-                <Trash2 class="w-3.5 h-3.5" />
-                Remove
-              </Button>
+            <Button
+              disabled={nodeIndex === null}
+              variant="outline"
+              size="sm"
+              class={"disabled:cursor-not-allowed border-none flex text-xs items-center gap-2 font-medium rounded-3xl border text-red-500 border-red-200 hover:bg-red-100 bg-red-50"}
+              on:click={() => {
+                if (nodeIndex !== undefined && nodeIndex !== null) {
+                  nodeModify = true;
+                } else {
+                  alert("please select a node");
+                }
+              }}
+            >
+              <Trash2 class="w-3.5 h-3.5" />
+              Remove
+            </Button>
             <!-- </AlertDeleteNode> -->
           </div>
         </div>
@@ -600,7 +596,7 @@
                       return camera[0].name
                         .toLowerCase()
                         .includes(e.target.value.toLowerCase());
-                    },
+                    }
                   );
                   filteredCameraNames = [...filteredNames];
                 }}
@@ -712,23 +708,22 @@
                 name={newData?.[nodeIndex]?.cameraData?.[detailIndex]?.[0]
                   ?.name}
               > -->
-                <Button
-                  disabled={detailIndex === null}
-                  variant="outline"
-                  size="sm"
-                  class={"disabled:cursor-not-allowed border-none flex text-xs items-center gap-2 font-medium rounded-3xl border text-red-500 border-red-200 hover:bg-red-100 bg-red-50"}
-                  on:click={() => {
-                    if (nodeIndex !== undefined && nodeIndex !== null) {
-                      nodeModify = true;
-                    } else {
-                      alert("please select a node");
-                     
-                    }
-                  }}
-                >
-                  <Trash2 class="w-3.5 h-3.5" />
-                  Remove
-                </Button>
+              <Button
+                disabled={detailIndex === null}
+                variant="outline"
+                size="sm"
+                class={"disabled:cursor-not-allowed border-none flex text-xs items-center gap-2 font-medium rounded-3xl border text-red-500 border-red-200 hover:bg-red-100 bg-red-50"}
+                on:click={() => {
+                  if (nodeIndex !== undefined && nodeIndex !== null) {
+                    nodeModify = true;
+                  } else {
+                    alert("please select a node");
+                  }
+                }}
+              >
+                <Trash2 class="w-3.5 h-3.5" />
+                Remove
+              </Button>
               <!-- </CameraDeleteDialog> -->
             </div>
           </div>
@@ -1344,7 +1339,7 @@
                     >
                       <!-- Status  -->
                       {camStatusData.find(
-                        (status) => status.camera === item[0].id,
+                        (status) => status.camera === item[0].id
                       )?.status
                         ? "Online"
                         : "Offline" || "Unknown"}

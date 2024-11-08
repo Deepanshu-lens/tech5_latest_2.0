@@ -22,7 +22,7 @@
 >
   <!-- Selecting Tabs -->
   <div
-    class="flex items-center justify-center rounded-lg border-black/[.13] border-solid border-[1px] p-1 w-[600px] h-[40px] mx-auto mb-10"
+    class="flex items-center justify-center rounded-lg border-black/[.13] dark:border-neutral-700 border-solid border-[1px] p-1 w-[600px] h-[40px] mx-auto mb-10"
   >
     <button
       on:click={() => (selected = 1)}
@@ -157,6 +157,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="px-6 font-medium mb-4">Firmware Update</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -204,6 +205,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="font-medium px-6 mb-4">Reboot</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -225,6 +227,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="font-medium px-6 mb-8">Timezone settings</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -237,11 +240,11 @@
           >
             <option>{selectedTimezone}</option>
           </select>
-          <span
+          <!-- <span
             class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
           >
             <ChevronDown size={18} />
-          </span>
+          </span> -->
         </div>
       </div>
     </div>
@@ -249,6 +252,7 @@
       class=" w-[94.5%] my-4 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="font-medium px-6 mb-8 mt-8">Sync your Timeline</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -263,6 +267,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="font-medium px-6 mb-4">Diagnostics</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -274,6 +279,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="font-medium px-6 mb-4">System Logs</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />

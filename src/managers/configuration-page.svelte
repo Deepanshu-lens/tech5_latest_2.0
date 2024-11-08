@@ -31,7 +31,7 @@
 
   // State
   let search: string | null = null;
-  const currentSection = writable<Section>("Remote");
+  const currentSection = writable<Section>("Camera");
 
   // URL handling
   $: {
@@ -80,7 +80,7 @@
             <User2 class="h-[22px] w-[22px]" />
           {/if}
         </button>
-        <p class={`text-xs ${search !== section ? "group-hover:text-[#015a62] text-[#727272]/90 dark:text-white dark:group-hover:text-[#258d9d]" : "dark:text-[#258d9d] text-[#015a62]"}`}>
+        <p class={`text-xs ${$currentSection !== section ? "group-hover:text-[#015a62] text-[#727272]/90 dark:text-white dark:group-hover:text-[#258d9d]" : "dark:text-[#258d9d] text-[#015a62]"}`}>
           {section}
         </p>
       </span>
