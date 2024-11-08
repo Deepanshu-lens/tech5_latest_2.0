@@ -19,15 +19,7 @@
   import Remote from "@/components/configuration/settings/Remote.svelte";
   import System from "@/components/configuration/settings/System.svelte";
   import UserS from "@/components/configuration/users.svelte";
-  // import SettingsList from "@/components/configuration/settings-list.svelte";
   import License from "@/components/configuration/settings/License.svelte";
-
-  // Props
-  export let user: any;
-  export let records: any;
-  export let logs: any;
-  export let data: any;
-  export let sessionId: string;
 
   // State
   let search: string | null = null;
@@ -36,16 +28,21 @@
   // URL handling
   $: {
     const searchParams = new URLSearchParams(window.location.search);
-    search = searchParams.get("section");
-    if (search === null) {
+    search = searchParams.get("section") as Section;
+    if (search && ["Remote", "Stream", "Recording", "System", "Camera", "License", "User"].includes(search)) {
+      currentSection.set(search as Section);
+    } else {
       searchParams.set("section", "Remote");
       window.history.replaceState(null, "", `${location.pathname}?${searchParams}`);
-      search = "Remote";
+      currentSection.set("Remote");
     }
   }
 
   // Methods
   const handleButtonClick = (text: Section) => {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("section", text);
+    window.history.pushState(null, "", `${location.pathname}?${searchParams}`);
     currentSection.set(text);
   };
 
@@ -102,7 +99,7 @@
     {:else if $currentSection === "License"}
       <License />
     {:else}
-      <UserS />
+      <UserS/>
     {/if}
   </div>
 
