@@ -2,8 +2,6 @@
 import { Icon } from "astro-icon/components";
 import { Input } from "@/components/ui/input";
 import { actions } from "astro:actions";
-import { reference } from "astro:content";
-
 const { result, inputErrors } = Astro.props;
 console.log(result, inputErrors);
 export const prerender = false;
