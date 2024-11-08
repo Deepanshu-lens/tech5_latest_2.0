@@ -13,14 +13,14 @@
     Router,
     User2,
   } from "lucide-svelte";
-  import Stream from "@/components/configuration/stream.svelte";
-  import Camera from "@/components/configuration/camera.svelte";
-  import Recording from "@/components/configuration/recording.svelte";
-  import Remote from "@/components/configuration/remote.svelte";
-  import System from "@/components/configuration/system.svelte";
+  import Stream from "@/components/configuration//settings/Stream.svelte";
+  import Camera from "@/components/configuration/settings/Camera.svelte";
+  import Recording from "@/components/configuration/settings/Recording.svelte";
+  import Remote from "@/components/configuration/settings/Remote.svelte";
+  import System from "@/components/configuration/settings/System.svelte";
   import UserS from "@/components/configuration/users.svelte";
-  import SettingsList from "@/components/configuration/settings-list.svelte";
-  import License from "@/components/configuration/licence.svelte";
+  // import SettingsList from "@/components/configuration/settings-list.svelte";
+  import License from "@/components/configuration/settings/License.svelte";
 
   // Props
   export let user: any;
@@ -31,7 +31,7 @@
 
   // State
   let search: string | null = null;
-  const currentSection = writable<Section>("User");
+  const currentSection = writable<Section>("Remote");
 
   // URL handling
   $: {
