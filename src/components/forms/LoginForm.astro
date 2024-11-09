@@ -1,13 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Input } from "@/components/ui/input";
-import { actions } from "astro:actions";
 const { result, inputErrors } = Astro.props;
 console.log(result, inputErrors);
-export const prerender = false;
 ---
 
-<form class="space-y-4 w-full" method="POST" action={actions.auth.login}>
+<form class="space-y-4 w-full" method="POST">
   <div class="grid w-full max-w-sm items-center gap-1.5">
     <div class="relative">
       <Icon

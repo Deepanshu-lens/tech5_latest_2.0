@@ -6,6 +6,8 @@ import LiveRightSection from "@/components/live/live-right-section.svelte";
 import EventsManager from "@/managers/events.svelte";
 import Camera from "@/managers/camera.svelte";
 import Node from "@/managers/node.svelte";
+
+const STREAM_URL = import.meta.env.STREAM_URL;
 ---
 
 <Node client:only="svelte" />
@@ -13,7 +15,7 @@ import Node from "@/managers/node.svelte";
 <Layout title="LENS View">
   <div class="flex flex-row">
     <EventsManager client:only="svelte" />
-    <StreamLayout client:only="svelte" />
+    <StreamLayout client:only="svelte" {STREAM_URL} />
     <LiveRightSection client:only="svelte" />
   </div>
 </Layout>

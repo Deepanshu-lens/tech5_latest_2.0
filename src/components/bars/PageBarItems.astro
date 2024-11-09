@@ -1,9 +1,14 @@
 ---
-import { actions } from "astro:actions";
 import { Icon } from "astro-icon/components";
 const { isVertical } = Astro.props;
-const { data } = await Astro.callAction(actions.user.pages, []);
-const referer = Astro.request.headers.get("Referer") || "";
+const data = [
+  { name: "Live", link: "/" },
+  { name: "Playback", link: "/playback" },
+  { name: "Events", link: "/events" },
+  { name: "Gallery", link: "/gallery" },
+  { name: "Configuration", link: "/configuration" },
+  { name: "Reports", link: "/reports" },
+];
 ---
 
 <div

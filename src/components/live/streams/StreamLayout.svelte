@@ -3,8 +3,7 @@
   import StreamTile from "./StreamTile.svelte";
   import Pagination from "./pagination/Pagination.svelte";
 
- 
-
+  export let STREAM_URL = "";
   const MAX_CAMERAS_PER_PAGE = 9;
 
   // Function to determine the grid style based on the number of cameras
@@ -37,7 +36,7 @@
         <StreamTile
           class="camera-placeholder"
           name={camera.name}
-          url={`wss://view.lenscorp.cloud/api/ws?src=${camera.id}`}
+          url={`${STREAM_URL}/api/ws?src=${camera.id}`}
         />
       {/each}
     {/key}

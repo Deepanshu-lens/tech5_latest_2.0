@@ -21,7 +21,4 @@ export default defineConfig({
     icon(),
   ],
   devToolbar: { enabled: false },
-  experimental: {
-    serverIslands: true,
-  },
 });
