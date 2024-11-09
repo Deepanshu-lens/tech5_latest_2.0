@@ -1,6 +1,7 @@
 <script>
   import { user } from "@/stores";
   export let isVertical = false;
+  import * as Popover from "@/components/ui/popover";
 
   const MAX_NAME_LENGTH = 20;
   const MAX_EMAIL_LENGTH = 30;
@@ -27,22 +28,52 @@
 </script>
 
 {#if $user}
-  <button
-    class="flex items-center space-x-3 hover:bg-accent py-1.5 px-2 rounded-md"
-  >
-    <img
-      src={$user.avatar ||
-        `https://ui-avatars.com/api/name=${$user.name}?background=random` ||
-        ""}
-      alt="User Avatar"
-      class="rounded-lg"
-      width={isVertical ? 64 : 36}
-    />
-    {#if !isVertical}
-      <div class="space-y-0 flex-col flex items-start">
-        <span class="text-sm">{displayName}</span>
-        <span class="text-xs">{displayEmail}</span>
+  <Popover.Root>
+    <Popover.Trigger>
+      <div
+        class="flex items-center space-x-3 hover:bg-accent py-1.5 px-2 rounded-md"
+      >
+        <img
+          src={$user.avatar ||
+            `https://ui-avatars.com/api/name=${$user.name}?background=random` ||
+            ""}
+          alt="User Avatar"
+          class="rounded-lg"
+          width={isVertical ? 64 : 36}
+        />
+        {#if !isVertical}
+          <div class="space-y-0 flex-col flex items-start">
+            <span class="text-sm">{displayName}</span>
+            <span class="text-xs">{displayEmail}</span>
+          </div>
+        {/if}
       </div>
-    {/if}
-  </button>
+    </Popover.Trigger>
+    <Popover.Content
+      class="p-0 w-60 divide-y  rounded-lg  text-sm font-normal  transform opacity-100 scale-100"
+    >
+      <p class="truncate px-3.5 py-3" role="none">
+        <span class="block text-xs text-gray-500" role="none">Signed in as</span
+        ><span class="mt-0.5 font-semibold" role="none">{$user?.email}</span>
+      </p>
+      <div class="py-1.5" role="none">
+        <a class="block py-1.5 px-3.5 hover:bg-accent">Changelog</a><a
+          class="block py-1.5 px-3.5 hover:bg-accent">Support</a
+        ><a class="block py-1.5 px-3.5 hover:bg-accent">License</a>
+      </div>
+      <div class="py-1.5" role="none">
+        <a class="block py-1.5 px-3.5 hover:bg-accent"
+          >Upgrade to Team License</a
+        >
+      </div>
+      <div class="py-1.5" role="none">
+        <a class="block py-1.5 px-3.5 hover:bg-accent">Account Settings</a
+        ><button
+          type="button"
+          class="block w-full py-1.5 text-left px-3.5 hover:bg-accent"
+          on:click={logout}>Sign out</button
+        >
+      </div></Popover.Content
+    >
+  </Popover.Root>
 {/if}

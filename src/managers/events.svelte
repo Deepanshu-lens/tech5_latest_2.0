@@ -10,7 +10,9 @@
       pb.autoCancellation(false);
       const localEvents = await pb.collection("events").getFullList<any>({
         sort: "created",
+        page: 1,
       });
+      console.log("EVENTS:", localEvents);
       liveEvents.set(localEvents);
       localEvents.length > 0;
     } catch (error) {
@@ -27,11 +29,11 @@
         });
       } else if (e.action === "update") {
         liveEvents.update((current: any) =>
-          current.map((cam: any) => (cam.id === e.record.id ? e.record : cam)),
+          current.map((cam: any) => (cam.id === e.record.id ? e.record : cam))
         );
       } else if (e.action === "delete") {
         liveEvents.update((current: any) =>
-          current.filter((cam: any) => cam.id !== e.record.id),
+          current.filter((cam: any) => cam.id !== e.record.id)
         );
       }
     });
