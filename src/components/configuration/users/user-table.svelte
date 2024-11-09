@@ -12,109 +12,19 @@
     import { Checkbox } from "@/components/ui/checkbox";
     import {
       SlidersHorizontal,
-      ChevronDown,
       Plus,
       ArrowDown,
       SquarePen,
     } from "lucide-svelte";
     import { user } from '@/stores'
-  import { onMount } from "svelte";
-
-    let userChildrenData:any[] = [];
-    let userData:any;
-    let roles = {
+    export let userData: any;
+    export let userChildrenData: any;
+    const roles = {
         superAdmin: 'Super Admin',
         admin: 'Admin',
         user: 'User',
     };
-    const BASE_URL = "https://license.lenscorp.cloud/api";
 
-  
-    // Mock data for the table
-    // const userChildrenData = [
-    //   {
-    //     name: "Sam Singh",
-    //     email: "sam.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Changed Password from userChildrenData",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    //   {
-    //     name: "Rahul Singh",
-    //     email: "rahul.singh@gmail.com",
-    //     lastActivity: "Thu, March 21, 2024",
-    //     logEvent: "Added new face to FRS",
-    //   },
-    // ];
-
-    async function fetchUserData(userId:string) {
-    try {
-      const response = await fetch(`${BASE_URL}/user/${userId}/details`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    const childrenData = $user ? await fetchUserChildrenData($user.id) : [];
-    userData = data;
-    userChildrenData = childrenData;
-  } catch (error) {
-    console.error('Fetch error:', error);
-    }
-  }
-
-async function fetchUserChildrenData(userId:string) {
-  try {
-    const response = await fetch(`${BASE_URL}/user/${userId}/children`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Fetch error:', error);
-  }
-}
-
-onMount(() => {
-  if ($user && $user.id) {
-    fetchUserData($user.id);
-  }
-})
 </script>
   
   <div class="p-2 h-auto rounded-lg w-full">

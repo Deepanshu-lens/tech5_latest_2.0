@@ -1,9 +1,10 @@
 <script lang="ts">
-    // imports
-    import * as Table from "@/components/ui/table";
+    // Imports
+    import { onMount } from "svelte";
+    import { Filter, Search} from "lucide-svelte";
+    import { user } from "@/stores";
     import * as Tabs from "@/components/ui/tabs";
     import Checkbox from "@/components/ui/checkbox/checkbox.svelte";
-    import { Filter, Search} from "lucide-svelte";
     import EventsTable from "./settings/EventsTable.svelte";
     import GalleryTable from "./settings/GalleryTable.svelte";
     import PlaybackTable from "./settings/PlaybackTable.svelte";
@@ -13,15 +14,24 @@
     import NavbarTable from "./users/navbar-table.svelte";
     import UserTable from "./users/user-table.svelte";
     import LiveTable from "./permissions/live-table.svelte";
-  import { onMount } from "svelte";
 
     // Type Definitions
+    interface PermissionItem {
+        collectionId: string;
+        collectionName: string;
+        created: string;
+        feature: string;
+        id: string;
+        permission: string;
+        updated: string;
+    }
+
     interface PermissionsTabItem {
         id: string;
         value: string;
         label: string;
+        features: PermissionItem[];
     }
-    type PermissionNav = typeof permissionTabs[number]['value'];
 
     interface NavItem {
         id: number;
@@ -29,56 +39,160 @@
         logMessage?: string;
     }
 
+    type PermissionNav = typeof permissionTabs[number]['value'];
+
     // Constants
-    let permissionTabs: PermissionsTabItem[] = [];
+    const BASE_URL = 'https://license.lenscorp.cloud/api';
+
 
     const navItems: NavItem[] = [
         { id: 1, label: "User details", logMessage: "user clicked on user details button, user panel" },
         { id: 2, label: "Permissions", logMessage: "user clicked on permissions button, user panel" },
         { id: 3, label: "Policies", logMessage: "user clicked on policies button, user panel" },
-        { id: 4, label: "Login Events", logMessage: "user clicked on login events button, user panel" },
-        { id: 6, label: "System Logs", logMessage: "user clicked on system logs button, user panel" },
-        { id: 5, label: "Device Authorisation", logMessage: "user clicked on device authorisation button, user panel" },
     ];
 
     // State Variables
     let selected = 1;
     let permissionTab: "permissions" | "nodes" = "permissions";
+    let permissionTabs: PermissionsTabItem[] = [];
+    let userChildrenData: any[] = [];
+    let userData: any;
+    let liveData: any[] = [];
+    let playbackData: any[] = [];
 
     // Functions
+    async function fetchUserData(userId: string) {
+        try {
+            const response = await fetch(`${BASE_URL}/user/${userId}/details`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            const childrenData = $user ? await fetchUserChildrenData($user.id) : [];
+            userData = data;
+            userChildrenData = childrenData;
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
+    async function fetchUserChildrenData(userId: string) {
+        try {
+            const response = await fetch(`${BASE_URL}/user/${userId}/children`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
+    }
+
     function getComponent(value: PermissionNav) {
+        // Find the matching tab to get its features
+        const tab = permissionTabs.find(tab => tab.value === value);
+        const features = tab?.features || [];
+
         switch (value) {
-            case "live": return LiveTable;
-            case "playback": return PlaybackTable;
-            case "events": return EventsTable;
-            case "gallery": return GalleryTable;
-            case "config": return ConfigurationTable;
-            case "reports": return ReportsTable;
-            case "navbar": return NavbarTable;
-            default: return LiveTable;
+            case "live": 
+                return { 
+                    component: LiveTable, 
+                    props: { 
+                        data: features, 
+                    } 
+                };
+            case "playback": 
+                return { 
+                    component: PlaybackTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            case "events": 
+                return { 
+                    component: EventsTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            case "gallery": 
+                return { 
+                    component: GalleryTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            case "config": 
+                return { 
+                    component: ConfigurationTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            case "reports": 
+                return { 
+                    component: ReportsTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            case "navbar": 
+                return { 
+                    component: NavbarTable, 
+                    props: { 
+                        data: features 
+                    } 
+                };
+            default: 
+                return { 
+                    component: LiveTable, 
+                    props: { 
+                        data: liveData,
+                        features: features 
+                    } 
+                };
         }
     }
 
     onMount(() => {
-    (async () => {
-        let loading = true;
-        try {
-            const response = await fetch('https://license.lenscorp.cloud/api/features');
-            const data = await response.json();
-            console.log('Feature API result:', data);
-            permissionTabs = data.items.map((item: any) => ({
-                id: item.id,
-                value: item.features.toLowerCase(),
-                label: item.features
-            }));
-        } catch (error) {
-            console.error('Error fetching feature API:', error);
-        } finally {
-            loading = false;
+        if ($user && $user.id) {
+            fetchUserData($user.id);
         }
-    })();
-    });
 
+        // Fetch features data
+        (async () => {
+            let loading = true;
+            try {
+                const response = await fetch(`${BASE_URL}/features`);
+                const data = await response.json();
+                const features_response = await fetch(`${BASE_URL}/featuresPermissison`);
+                const features_data = await features_response.json();
+
+                // Group complete permission objects by feature
+                const permissionsByFeature = features_data.items.reduce((acc: Record<string, PermissionItem[]>, item: PermissionItem) => {
+                    if (!acc[item.feature]) {
+                        acc[item.feature] = [];
+                    }
+                    acc[item.feature].push(item);
+                    return acc;
+                }, {});
+
+                // Map the data including the complete feature objects
+                permissionTabs = data.items.map((item: any) => ({
+                    id: item.id,
+                    value: item.features.toLowerCase(),
+                    label: item.features,
+                    features: permissionsByFeature[item.id] || []
+                }));
+                
+            } catch (error) {
+                console.error('Error fetching feature API:', error);
+            } finally {
+                loading = false;
+            }
+        })();
+    });
 </script>
   
   <div
@@ -112,7 +226,7 @@
       <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>  
     
       <!-- User Table -->
-      <UserTable />
+      <UserTable userData={userData} userChildrenData={userChildrenData}/>
     {/if}
     {#if selected === 2}
       <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>  
@@ -122,10 +236,10 @@
         <div class="py-3">
           <div class="flex-cb">
             <h2 class="font-medium text-lg">Permission</h2>
-            <span
+            <!-- <span
               class="text-sm text-black/.5 bg-[#F7FAFF] rounded-lg px-2 py-1 text-[#0070FF]"
               >Super Admin</span
-            >
+            > -->
           </div>
           <p class="text-xs font-normal text-[#667085]">
             Select & assign permissions to users
@@ -144,18 +258,19 @@
             >Nodes</button>
         </span>
         <span class="flex items-center gap-4">
-          <span class="text-xs font-medium flex items-center gap-2"
+          <span class="text-xs font-medium flex items-center gap-2 opacity-50 cursor-not-allowed"
             ><Filter size={18} /> Filters</span
           >
           <span
-            class="relative rounded-lg border-2 border-solid border-[#d0d5dd]"
+            class="relative rounded-lg border-2 border-solid border-[#d0d5dd]/10"
           >
             <input
+              disabled
               type="text"
               placeholder="Search"
               class="border-none text-black outline-none pr-2 pl-8 py-2 text-sm placeholder:text-black bg-transparent"
             />
-            <Search class="absolute top-1/2 -translate-y-1/2 left-2" size={18} />
+            <Search class="absolute top-1/2 -translate-y-1/2 left-2 opacity-50" size={18} />
           </span>
         </span>
       </div>
@@ -174,8 +289,11 @@
             </Tabs.List>
 
             {#each permissionTabs as tab (tab.id)}
-                <Tabs.Content value={tab.value} class="-mt-1">
-                    <svelte:component this={getComponent(tab.value)} />
+                <Tabs.Content value={tab.value} class="mt-0">
+                    <svelte:component 
+                        this={getComponent(tab.value).component} 
+                        {...getComponent(tab.value).props} 
+                    />
                 </Tabs.Content>
             {/each}
         </Tabs.Root>
@@ -189,7 +307,7 @@
       <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>
       <h2 class="font-medium px-6 mb-4">Policies</h2>
     {/if}
-    {#if selected === 4}
+    <!-- {#if selected === 4}
       <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>
       <h2 class="font-medium px-6 mb-4">Login Events</h2>
       {#if records}
@@ -283,7 +401,7 @@
       {:else}
         <span class="px-6 text-sm">Loading...</span>
       {/if}
-    {/if}
+    {/if} -->
   </div>
   
   <style>
