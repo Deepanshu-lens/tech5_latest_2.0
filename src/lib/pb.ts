@@ -1,4 +1,4 @@
 import PocketBase from "pocketbase";
-const pb = new PocketBase("https://pocketbase.lenscorp.cloud");
+const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
 export default pb;
