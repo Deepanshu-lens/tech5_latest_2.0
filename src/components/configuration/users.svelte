@@ -89,6 +89,35 @@
         }
     }
 
+    async function assignPermissions(userId: string, featureId: string, permissions: string[]): Promise<{success: boolean; error?: string; message?: string}> {
+        try {
+            const response = await fetch(`${BASE_URL}/user/feature-permission`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,
+                    featureId,
+                    featurePermissionIds:permissions
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+            return { success: true, message: responseData.message };
+        } catch (error:any) {
+            console.error('Error assigning permissions:', error);
+            return { 
+                success: false, 
+                error: error.error
+            };
+        }
+    }
+
     function getComponent(value: PermissionNav) {
         // Find the matching tab to get its features
         const tab = permissionTabs.find(tab => tab.value === value);
@@ -99,49 +128,57 @@
                 return { 
                     component: LiveTable, 
                     props: { 
-                        data: features, 
+                        data: features,
+                        userChildrenData: userChildrenData,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "playback": 
                 return { 
                     component: PlaybackTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "events": 
                 return { 
                     component: EventsTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "gallery": 
                 return { 
                     component: GalleryTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "config": 
                 return { 
                     component: ConfigurationTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "reports": 
                 return { 
                     component: ReportsTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             case "navbar": 
                 return { 
                     component: NavbarTable, 
                     props: { 
-                        data: features 
+                        data: features,
+                        assignPermissions: assignPermissions
                     } 
                 };
             default: 
