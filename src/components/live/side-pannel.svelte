@@ -198,7 +198,6 @@
       <Popover.Trigger let:builder>
         <!-- <Button builders={[builder]} variant="outline">Open</Button> -->
         <button
-          disabled
           class={`disabled:cursor-not-allowed disabled:opacity-50 text-black/[.4] h-[30px] w-[30px] rounded-full shadow-md group border-2 border-solid border-black/[.4] dark:border-white/[.4] bg-white dark:bg-black dark:text-white group-hover:text-white group-hover:bg-[#015a62] dark:group-hover:bg-[#258d9d] group-hover:border-none grid place-items-center`}
           ><Icon
             icon="material-symbols:grid-view-outline-rounded"

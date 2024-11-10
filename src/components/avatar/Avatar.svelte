@@ -1,6 +1,7 @@
 <script>
   import { user } from "@/stores";
   export let isVertical = false;
+  import pb from "@/lib/pb";
   import * as Popover from "@/components/ui/popover";
 
   const MAX_NAME_LENGTH = 20;
@@ -8,6 +9,23 @@
 
   let displayName = "";
   let displayEmail = "";
+
+  async function logout() {
+    pb.authStore.clear();
+    user.set(undefined);
+
+    if (window.api) {
+      await window.api.invoke("clear-auth-token");
+    } else {
+      localStorage.removeItem("pb_auth_token");
+    }
+
+    if (window.api) {
+      window.api.navigate("/login");
+    } else {
+      window.location.href = "/login";
+    }
+  }
 
   // Reactive statement to update displayName and displayEmail when $user changes
   $: if ($user) {
@@ -29,7 +47,7 @@
 
 {#if $user}
   <Popover.Root>
-    <Popover.Trigger>
+    <Popover.Trigger let:builder>
       <div
         class="flex items-center space-x-3 hover:bg-accent py-1.5 px-2 rounded-md"
       >
