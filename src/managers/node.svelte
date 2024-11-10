@@ -12,11 +12,6 @@
         filter: `session.id?="${pb.authStore.model.session[0]}"`,
         sort: "-created",
       });
-      console.log(
-        localNodes.length,
-        localNodes,
-        localStorage.getItem("selectedNode")
-      );
       nodes.set(localNodes);
       localNodes.length > 0 &&
         (localStorage.getItem("selectedNode")
