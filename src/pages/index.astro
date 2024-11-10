@@ -8,10 +8,9 @@ import Node from "@/managers/node.svelte";
 
 const STREAM_URL = import.meta.env.STREAM_URL;
 ---
-
-<Node client:only="svelte" />
-<Camera client:only="svelte" />
 <Layout title="LENS View">
+  <Node client:only="svelte" />
+  <Camera client:only="svelte" />
   <div class="flex flex-row">
     <EventsManager client:only="svelte" />
     <StreamLayout client:only="svelte" {STREAM_URL} />

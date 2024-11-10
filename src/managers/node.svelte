@@ -44,5 +44,4 @@
     console.error("Failed realtime camera");
   }
 
-  $: console.log("Nodes: ", $nodes);
 </script>

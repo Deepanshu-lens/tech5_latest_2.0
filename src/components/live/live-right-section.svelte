@@ -22,7 +22,6 @@
     selectedEvent = null;
   }
 
-  $: console.log("Selected Event", selectedEvent);
 </script>
 
 {#if $nodes.length > 0}

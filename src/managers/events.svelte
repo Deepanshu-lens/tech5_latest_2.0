@@ -43,20 +43,20 @@
   }
 
   //todo: find something better than this
-  $: if ($activePanel) {
-    (async () => {
-      try {
-        // Fetch initial data
-        pb.autoCancellation(false);
-        const localEvents = await pb.collection("events").getFullList<any>({
-          sort: "-created",
-          fields: "title,frameImage",
-        });
-        liveEvents.set(localEvents);
-        localEvents.length > 0;
-      } catch (error) {
-        console.error("Error initializing Panel Manager:", error);
-      }
-    })();
-  }
+  // $: if ($activePanel) {
+  //   (async () => {
+  //     try {
+  //       // Fetch initial data
+  //       pb.autoCancellation(false);
+  //       const localEvents = await pb.collection("events").getList<any>(1, 100, {
+  //         sort: "-created",
+  //         fields: "title,frameImage",
+  //       });
+  //       liveEvents.set(localEvents);
+  //       localEvents.length > 0;
+  //     } catch (error) {
+  //       console.error("Error initializing Panel Manager:", error);
+  //     }
+  //   })();
+  // }
 </script>
