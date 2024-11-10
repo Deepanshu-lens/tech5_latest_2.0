@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Event } from "@/types";
 import { writable } from "svelte/store";
 

@@ -5,7 +5,7 @@ import Logo from "@/components/logo/index.astro";
 
 interface Props {
   title: string;
-  mode: "login" | "register";
+  mode?: "login" | "register";
 }
 const { title, mode = "login" } = Astro.props;
 export const prerender = true;
