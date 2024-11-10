@@ -6,14 +6,18 @@
   (async () => {
     try {
       // Fetch initial data
+
       const localNodes = await pb.collection("node").getFullList<Node>({
         fields: "id,name",
+        filter: `session.id?="${pb.authStore.model.session[0]}"`,
         sort: "-created",
       });
+      console.log(localNodes.length, localNodes);
       nodes.set(localNodes);
-      localNodes.length > 0 && localStorage.getItem("selectedNode")
-        ? selectedNode.set(localStorage.getItem("selectedNode"))
-        : selectedNode.set(localNodes[0].id);
+      localNodes.length > 0 &&
+        (localStorage.getItem("selectedNode")
+          ? selectedNode.set(localStorage.getItem("selectedNode"))
+          : selectedNode.set(localNodes[0].id));
     } catch (error) {
       console.error("Error initializing Camera Manager:", error);
     }

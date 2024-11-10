@@ -1,10 +1,17 @@
 <script>
-  import { cameras, selectedLayout, totalCameras } from "@/stores";
+  import {
+    cameras,
+    selectedLayout,
+    totalCameras,
+    nodes,
+    user,
+    selectedNode,
+  } from "@/stores";
+  import pb from "@/lib/pb";
   import StreamTile from "./StreamTile.svelte";
   import Pagination from "./pagination/Pagination.svelte";
 
   export let STREAM_URL = "";
-  const MAX_CAMERAS_PER_PAGE = 9;
 
   // // Function to determine the grid style based on the number of cameras
   const layoutConfigs = {
@@ -45,25 +52,80 @@
 
   // Reactive statement to calculate the grid style dynamically
   $: gridStyle = getGridStyle($cameras.length, $selectedLayout);
+
+  let nodeName = "";
+  const addNode = async () => {
+    const data = {
+      name: nodeName,
+      session: $user.session[0],
+    };
+    const record = await pb.collection("node").create(data);
+    selectedNode.set(record.id);
+  };
 </script>
 
-<div class="flex flex-col flex-grow">
-  <div class="camera-grid" style={gridStyle + " height: calc(100vh - 7rem);"}>
-    {#key $cameras}
-      {#each $cameras as camera}
-        <StreamTile
-          name={camera.name}
-          id={camera.id}
-          url={`${STREAM_URL}/api/ws?src=${camera.id}`}
-        ></StreamTile>
-      {/each}
-    {/key}
-  </div>
+{#if $nodes && $user}
+  {#if $nodes.length === 0}
+    <div
+      class="
+    flex
+    flex-col
+    items-start
+    justify-center h-screen w-screen
+    dark:bg-dark-add-node
+    bg-no-repeat
+    pl-32
+    bg-light-add-node
+    bg-contain
+    bg-right
+    dark:bg-cover"
+    >
+      <form
+        on:submit={(e) => e.preventDefault()}
+        method="POST"
+        class="flex flex-col"
+      >
+        <label for="nodeName" class="font-medium text-start self-start mb-2">
+          Node name
+        </label>
+        <input
+          name="name"
+          required
+          bind:value={nodeName}
+          class="w-[480px] text-black dark:text-white dark:bg-background bg-transparent font-medium px-4 h-[48px] rounded-md border-2 border-solid border-[#015a62] dark:border-none mb-6"
+        />
+        <button
+          class="flex max-w-[160px] hover:bg-[#015a62]/[.9] dark:bg-transparent bg-[#015a62] border-2 border-white border-solid dark:hover:bg-[white] dark:hover:text-[#015a62] text-md text-white items-center justify-center py-2 px-6 font-medium rounded-lg"
+          type="submit"
+          on:click={addNode}
+        >
+          Add Node
+        </button>
+      </form>
+    </div>
+  {:else}
+    <div class="flex flex-col flex-grow">
+      <div
+        class="camera-grid"
+        style={gridStyle + " height: calc(100vh - 7rem);"}
+      >
+        {#key $cameras}
+          {#each $cameras as camera}
+            <StreamTile
+              name={camera.name}
+              id={camera.id}
+              url={`${STREAM_URL}/api/ws?src=${camera.id}`}
+            ></StreamTile>
+          {/each}
+        {/key}
+      </div>
 
-  {#if $totalCameras > 0}
-    <Pagination />
+      {#if $totalCameras > 0}
+        <Pagination />
+      {/if}
+    </div>
   {/if}
-</div>
+{/if}
 
 <style>
   .camera-grid {
