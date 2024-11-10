@@ -1,11 +1,12 @@
+import type { Event } from "@/types";
 import { writable } from "svelte/store";
 
 const createEventsStore = () => {
-  const { subscribe, set, update } = writable<unknown[]>([]);
+  const { subscribe, set, update } = writable<Event[]>([]);
   return {
     subscribe,
     set: (data: unknown[]) => {
-        //todo: validate here
+      //todo: validate here
       set(data);
     },
     update: (updater: (items: unknown[]) => unknown[]) => {
@@ -19,4 +20,3 @@ const createEventsStore = () => {
 };
 
 export const liveEvents = createEventsStore();
- 
