@@ -17,34 +17,26 @@
   let state = "LOADING";
 
   function fullscreen() {
-    // videoElement.wsURL = `wss://view.lenscorp.cloud/api/ws?src=${id}_FULL`;
-    // videoElement.refreshStream();
+    console.log("fullscreen");
+    videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}_FULL`);
+
     if (videoElement.requestFullscreen) {
       videoElement.requestFullscreen({ navigationUI: "show" });
-      //       document.addEventListener(
-      //         "fullscreenchange",
-      //         function handleFullscreenChange() {
-      //           if (!document.fullscreenElement && stream?.subUrl) {
-      //             // Reset the data-url when exiting fullscreen
-      //             streamElement.setAttribute(
-      //               "data-url",
-      //               `
-      // wss://view.lenscorp.cloud/api/ws?src=${stream.id}`
-      //             );
-      //             console.log(
-      //               "Exited fullscreen, resetting data-url:",
-      //               `
-      // wss://view.lenscorp.cloud/api/ws?src=${stream.id}`
-      //             );
+      document.addEventListener(
+        "fullscreenchange",
+        function handleFullscreenChange() {
+          if (!document.fullscreenElement) {
+            // Reset the data-url when exiting fullscreen
+            videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}`);
 
-      //             // Remove the event listener after fullscreen change is handled
-      //             document.removeEventListener(
-      //               "fullscreenchange",
-      //               handleFullscreenChange
-      //             );
-      //           }
-      //         }
-      //       );
+            // Remove the event listener after fullscreen change is handled
+            document.removeEventListener(
+              "fullscreenchange",
+              handleFullscreenChange
+            );
+          }
+        }
+      );
     }
   }
 

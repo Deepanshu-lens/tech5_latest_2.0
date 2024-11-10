@@ -74,6 +74,11 @@ export class VideoStream extends VideoRTC {
     }, 1000);
   }
 
+  changeURL(url) {
+    this.wsURL = url;
+    this.refreshStream();
+  }
+
   refreshStream() {
     const currentMode = this.mode;
     const currentMedia = this.media;
