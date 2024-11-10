@@ -94,7 +94,7 @@
     <!-- <button
         disabled={!features.includes("Toggle Alerts")} -->
     <button
-      class={`text-black/[.4] h-[30px] w-[30px] rounded-full shadow-md border-2 border-solid border-black/[.4] dark:border-white/[.4] bg-white dark:bg-black dark:text-white group-hover:text-white group-hover:bg-[#015a62] dark:group-hover:bg-[#258d9d] group-hover:border-none grid place-items-center`}
+      class={`${$isAlertPanelOpen ? "font-bold bg-[#015a62]" : "border-black/[.4] dark:border-white/[.4] bg-white dark:bg-black"} text-black/[.4] h-[30px] w-[30px] rounded-full shadow-md border-2 border-solid   dark:text-white group-hover:text-white group-hover:bg-[#015a62] dark:group-hover:bg-[#258d9d] group-hover:border-none grid place-items-center`}
       on:click={() => isAlertPanelOpen.update((value) => !value)}
       ><Icon
         icon="material-symbols:notifications-active-outline-rounded"
@@ -102,7 +102,7 @@
       /></button
     >
     <p
-      class={`text-xs ${"group-hover:text-[#015a62] text-black/[.4] dark:text-white dark:group-hover:text-[#258d9d]"}`}
+      class={`text-xs ${$isAlertPanelOpen ? "text-[#015a62]" : "text-black/[.4] dark:text-white"} ${"group-hover:text-[#015a62]  dark:group-hover:text-[#258d9d]"}`}
     >
       Alerts
     </p>

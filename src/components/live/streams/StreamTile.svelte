@@ -1,5 +1,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import Icon from "@iconify/svelte";
+
   import { VideoStream } from "@/lib/video-stream";
 
   // Props
@@ -13,6 +15,38 @@
 
   let videoElement;
   let state = "LOADING";
+
+  function fullscreen() {
+    // videoElement.wsURL = `wss://view.lenscorp.cloud/api/ws?src=${id}_FULL`;
+    // videoElement.refreshStream();
+    if (videoElement.requestFullscreen) {
+      videoElement.requestFullscreen({ navigationUI: "show" });
+      //       document.addEventListener(
+      //         "fullscreenchange",
+      //         function handleFullscreenChange() {
+      //           if (!document.fullscreenElement && stream?.subUrl) {
+      //             // Reset the data-url when exiting fullscreen
+      //             streamElement.setAttribute(
+      //               "data-url",
+      //               `
+      // wss://view.lenscorp.cloud/api/ws?src=${stream.id}`
+      //             );
+      //             console.log(
+      //               "Exited fullscreen, resetting data-url:",
+      //               `
+      // wss://view.lenscorp.cloud/api/ws?src=${stream.id}`
+      //             );
+
+      //             // Remove the event listener after fullscreen change is handled
+      //             document.removeEventListener(
+      //               "fullscreenchange",
+      //               handleFullscreenChange
+      //             );
+      //           }
+      //         }
+      //       );
+    }
+  }
 
   onMount(() => {
     // Ensure VideoStream is defined before using it
@@ -29,9 +63,9 @@
       videoElement.visibilityCheck = visibilityCheck;
 
       // Set the source to start streaming
-      if (url) {
-        videoElement.src = url;
-      }
+      // if (url) {
+      //   videoElement.src = url;
+      // }
 
       videoElement.addEventListener("statechange", (event) => {
         state = videoElement.state;
@@ -47,6 +81,7 @@
 
   // Handle stream URL changes
   $: if (videoElement && url) {
+    console.log("URL Changed", url);
     videoElement.src = url;
   }
 
@@ -55,9 +90,19 @@
   }
 </script>
 
-<div class={state === "LOADING" && "camera-placeholder"}>
+<div
+  class={state === "LOADING"
+    ? "camera-placeholder"
+    : "relative overflow-hidden group"}
+>
   <!-- svelte-ignore element_invalid_self_closing_tag -->
   <video-stream bind:this={videoElement} class="video-player rounded-md" {id} />
+  <div
+    class="absolute top-2 right-2 rounded-md bg-black bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    on:click={() => fullscreen()}
+  >
+    <Icon icon="mdi:fullscreen" class="text-white text-3xl cursor-pointer" />
+  </div>
 </div>
 
 <style>

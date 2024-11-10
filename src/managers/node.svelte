@@ -11,11 +11,15 @@
         sort: "-created",
       });
       nodes.set(localNodes);
-      localNodes.length > 0 && selectedNode.set(localNodes[0].id);
+      localNodes.length > 0 && localStorage.getItem("selectedNode")
+        ? selectedNode.set(localStorage.getItem("selectedNode"))
+        : selectedNode.set(localNodes[0].id);
     } catch (error) {
       console.error("Error initializing Camera Manager:", error);
     }
   })();
+
+  $: if ($selectedNode) localStorage.setItem("selectedNode", $selectedNode);
 
   // //   initCameraManager();
   try {

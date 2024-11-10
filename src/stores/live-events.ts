@@ -11,7 +11,12 @@ const createEventsStore = () => {
     },
     update: (updater: (items: unknown[]) => unknown[]) => {
       update((current) => {
-        const updatedData = updater(current);
+        let updatedData = updater(current);
+
+        if (updatedData.length > 100) {
+          updatedData = updatedData.slice(0, 100);
+        }
+
         //todo: validate here
         return updatedData;
       });

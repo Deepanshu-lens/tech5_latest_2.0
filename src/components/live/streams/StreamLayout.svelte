@@ -34,10 +34,10 @@
     {#key $cameras}
       {#each $cameras as camera}
         <StreamTile
-          class="camera-placeholder"
           name={camera.name}
+          id={camera.id}
           url={`${STREAM_URL}/api/ws?src=${camera.id}`}
-        />
+        ></StreamTile>
       {/each}
     {/key}
   </div>
