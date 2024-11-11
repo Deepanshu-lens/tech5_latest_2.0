@@ -12,12 +12,6 @@
     return currentPath === href;
   };
 
-  axios
-    .get(
-      `https://license.lenscorp.cloud/api/user/${$user?.id}/license-permissions`
-    )
-    .then((result) => console.log(result));
-
   const data = [
     { name: "Live", link: "/", icon: "live-icon" },
     { name: "Playback", link: "/playback", icon: "playback-icon" },

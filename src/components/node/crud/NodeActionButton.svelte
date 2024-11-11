@@ -3,6 +3,7 @@
   import NodeActionModal from "./NodeActionModal.svelte";
 
   export let action: "add" | "edit" | "delete";
+
 </script>
 
 <NodeActionModal {action}>

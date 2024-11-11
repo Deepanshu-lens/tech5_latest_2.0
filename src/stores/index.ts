@@ -5,6 +5,8 @@ import { activePanel, panels } from "./panels";
 import { events } from "./events";
 import { liveEvents } from "./live-events";
 import { isAlertPanelOpen, selectedLayout } from "./ui";
+import { personCount } from "./person-counter";
+import { imageUrl } from "./heatMapimageUrl";
 
 export {
   user,
@@ -18,4 +20,6 @@ export {
   liveEvents,
   isAlertPanelOpen,
   selectedLayout,
+  personCount,
+  imageUrl,
 };
