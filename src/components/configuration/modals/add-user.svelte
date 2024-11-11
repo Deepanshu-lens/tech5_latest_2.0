@@ -36,6 +36,7 @@
     let userName: string = "";
     let userEmail: string = "";
     let userRole: { label: string, value: string } = { label: "", value: "" };
+    let isLoading: boolean = false;
   
     // Functions
     async function handleSubmit(addUserData?: USER_DATA) {
@@ -51,6 +52,7 @@
           parentId,
         };
 
+        isLoading = true;
         const response = await fetch(`${BASE_URL}/user`, {
           method: 'POST',
           headers: {
@@ -73,6 +75,8 @@
       } catch (error) {
         console.error("Error sending invite:", error);
         toast.error("Failed to send invite");
+      } finally {
+        isLoading = false;
       }
     }
 
@@ -151,11 +155,15 @@
           >
           <Button
             on:click={() => handleSubmit()}
-            disabled={!isEmailValid || !userEmail}
+            disabled={!isEmailValid || !userEmail || isLoading}
             class="mt-auto flex items-center gap-1 w-full"
           >
-            <Send size={16} />
-            Invite user
+            {#if isLoading}
+              <span>Inviting...</span>
+            {:else}
+              <Send size={16} />
+              Invite user
+            {/if}
           </Button>
         </span>
       </Dialog.Footer>
