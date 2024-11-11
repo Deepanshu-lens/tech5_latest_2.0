@@ -25,7 +25,7 @@
 
   const { form, errors, reset, isSubmitting } = createForm({
     initialValues: { name: cameraName, url: mainUrl, subUrl: subUrl },
-    extend: validator({ schema: cameraSchema.schema.omit({ id: true }) }),
+    // extend: validator({ schema: cameraSchema.schema.omit({ id: true }) }),
     onSubmit: async (values) => {
       console.log(cameraSchema.schema.omit({ id: true }).safeParse(values));
       console.log("Form submitted with:", values);
