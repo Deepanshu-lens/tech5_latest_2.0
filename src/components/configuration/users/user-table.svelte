@@ -46,12 +46,15 @@
           <SlidersHorizontal class="w-4 h-4 mr-2" />
           Filters
         </Button>
-        <AddUser parentId={$user?.id}>
-          <Button>
-            <Plus class="w-4 h-4 mr-2" />
-            Add User
-          </Button>
-        </AddUser>
+       
+        {#if $user?.role.name !== 'user'}
+          <AddUser parentId={$user?.id}>
+            <Button>
+              <Plus class="w-4 h-4 mr-2" />
+              Add User
+            </Button>
+          </AddUser>
+        {/if}
       </div>
     </div>
 

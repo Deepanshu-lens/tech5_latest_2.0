@@ -18,16 +18,16 @@
     { name: "Events", link: "/events", icon: "events-icon" },
     { name: "Gallery", link: "/gallery", icon: "gallery-icon" },
     {
-      name: "Configuration",
-      link: "/configuration",
-      icon: "configuration-icon",
-    },
-    {
       name: "Atlas",
       link: "/atlas",
       icon: "atlas-icon",
     },
     { name: "Reports", link: "/reports", icon: "reports-icon" },
+    {
+      name: "Configuration",
+      link: "/configuration",
+      icon: "configuration-icon",
+    },
   ];
 
   const disabledPaths = ["/events", "/gallery", "/reports"];
