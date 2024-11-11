@@ -14,7 +14,8 @@
       nodes.set(localNodes);
       localNodes.length > 0 &&
         (localStorage.getItem("selectedNode") &&
-        localNodes.filter((l) => l.id === $selectedNode).length > 0
+        localNodes.filter((l) => l.id === localStorage.getItem("selectedNode"))
+          .length > 0
           ? selectedNode.set(localStorage.getItem("selectedNode"))
           : selectedNode.set(localNodes[0].id));
     } catch (error) {
@@ -40,6 +41,7 @@
           nodes.update((current) =>
             current.filter((cam) => cam.id !== e.record.id)
           );
+          $nodes.length > 0 && selectedNode.set($nodes[0].id);
         }
       },
       {

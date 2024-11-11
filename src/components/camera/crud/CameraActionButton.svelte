@@ -39,7 +39,7 @@
     >
   {/if}
   {#if action === "add" && $cameras.length === 0 && showTooltip}
-    <div
+    <!-- <div
       class="absolute -top-0 left-1/2 transform -translate-x-1/2 bg-accent text-sm p-3 rounded shadow-lg animate-bounce"
       style="animation-delay: 0.5s;"
     >
@@ -48,5 +48,6 @@
         class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 w-3 h-3 bg-accent rotate-45"
         style="border-radius: 2px;"
       ></div>
-    </div>{/if}
+    </div> -->
+  {/if}
 </CameraActionModal>
