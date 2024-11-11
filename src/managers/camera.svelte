@@ -26,7 +26,7 @@
         "*",
         (e) => {
           console.log(
-            "Camera collection updated",
+            "Camera collection updated!! ",
             e.action,
             e.record,
             $selectedNode
