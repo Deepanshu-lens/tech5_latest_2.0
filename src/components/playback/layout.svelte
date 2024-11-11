@@ -11,7 +11,6 @@
     import { cn } from "@/lib/utils";
     import * as Pagination from "@/components/ui/pagination";
     import pb from "@/lib/pb";
-  import { onMount } from "svelte";
   import NodeSelection from "../node/NodeSelection.svelte";
   import { getCameras } from "@/managers/get-camera";
 
