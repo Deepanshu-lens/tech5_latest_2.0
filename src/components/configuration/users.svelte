@@ -123,7 +123,6 @@
         // Find the matching tab to get its features
         const tab = permissionTabs.find(tab => tab.value === value);
         const features = tab?.features || [];
-
         switch (value) {
             case "live": 
                 return { 
@@ -132,13 +131,14 @@
                         data: features,
                         userChildrenData: userChildrenData,
                         assignPermissions: assignPermissions
-                    } 
-                };
-            case "playback": 
-                return { 
-                    component: PlaybackTable, 
-                    props: { 
+                      } 
+                    };
+                    case "playback": 
+                    return { 
+                      component: LiveTable, 
+                      props: { 
                         data: features,
+                        userChildrenData: userChildrenData,
                         assignPermissions: assignPermissions
                     } 
                 };

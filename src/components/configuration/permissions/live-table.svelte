@@ -2,7 +2,7 @@
     import Button from "@/components/ui/button/button.svelte";
     import Checkbox from "@/components/ui/checkbox/checkbox.svelte";
     import * as Table from "@/components/ui/table/index";
-  import { toast } from "svelte-sonner";
+    import { toast } from "svelte-sonner";
 
     interface Permission {
         collectionId: string;
@@ -40,6 +40,7 @@
     interface User {
         name: string;
         id: string;
+        email: string;
         parentId: string;
         role: Role;
         license: License[];
@@ -193,6 +194,6 @@
             </Table.Row>
         {/each}
     </Table.Body>
-    <Button class="mr-auto" on:click={savePermissions}>Save</Button>
+    <Button class="mr-auto mb-10" on:click={savePermissions}>Save</Button>
 </Table.Root>
   
