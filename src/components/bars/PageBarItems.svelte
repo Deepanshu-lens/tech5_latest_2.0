@@ -36,6 +36,8 @@
     { name: "Reports", link: "/reports", icon: "reports-icon" },
   ];
 
+  const disabledPaths = ["/events", "/gallery", "/reports"];
+
   export let isVertical = false;
 </script>
 
@@ -49,7 +51,7 @@
       <a
         href={link.link}
         on:click={(e) => {
-          if (link.link !== "/" && link.link !== "/playback" && link.link !== "/atlas") {
+          if (disabledPaths.includes(link.link)) {
             e.preventDefault();
             return;
           }
@@ -60,10 +62,7 @@
           isActive(link.link)
             ? "font-medium bg-gray-200 text-black"
             : "font-normal hover:bg-gray-100 hover:text-black",
-          link.link !== "/" &&
-            link.link !== "/playback" &&
-            link.link !== "/atlas" &&
-            "cursor-not-allowed opacity-50"
+          disabledPaths.includes(link.link) && "cursor-not-allowed opacity-50"
         )}
       >
         <Icon icon={link.icon} width="24" height="24" />
@@ -71,18 +70,4 @@
       </a>
     {/each}
   </nav>
-  <!-- <a
-      href={link.link === "live" ? "/" : link.link}
-      class="text-base transition-all px-3 py-2 rounded-md {(new URL(referer)
-        .pathname === '/' &&
-        link.link === 'live') ||
-      new URL(referer).pathname.replace('/', '') === link.link
-        ? 'font-black text-[#015A62]'
-        : 'font-medium hover:text-[#015A62]'} flex {isVertical
-        ? 'flex-col items-center space-y-2'
-        : 'flex-row items-center space-x-2'}"
-    >
-      <Icon icon={link.icon} width="24" height="24" />
-      <span>{link.name}</span>
-    </a> -->
 </div>
