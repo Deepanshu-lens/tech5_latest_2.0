@@ -6,27 +6,23 @@
   (async () => {
     try {
       // Fetch initial data
-      let baseFilter = `session.id?="${pb.authStore.model.session[0]}"`;
-      let localNodes = await pb.collection("node").getFullList<Node>({
+
+      const localNodes = await pb.collection("node").getFullList<Node>({
         fields: "id,name",
-        filter: baseFilter,
+        filter: `session.id?="${pb.authStore.model.session[0]}"`,
         sort: "-created",
       });
       nodes.set(localNodes);
-      console.log(localStorage.getItem("selectedNode"));
-      localNodes.length > 0 && localStorage.getItem("selectedNode")
-        ? selectedNode.set(localStorage.getItem("selectedNode"))
-        : selectedNode.set(localNodes[0].id);
+      localNodes.length > 0 &&
+        (localStorage.getItem("selectedNode")
+          ? selectedNode.set(localStorage.getItem("selectedNode"))
+          : selectedNode.set(localNodes[0].id));
     } catch (error) {
       console.error("Error initializing Camera Manager:", error);
     }
   })();
 
-  $: if ($selectedNode) {
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem("selectedNode", String($selectedNode));
-    }
-  }
+  $: if ($selectedNode) localStorage.setItem("selectedNode", $selectedNode);
 
   // //   initCameraManager();
   try {
@@ -48,5 +44,4 @@
     console.error("Failed realtime camera");
   }
 
-  $: console.log("Nodes: ", $nodes);
 </script>

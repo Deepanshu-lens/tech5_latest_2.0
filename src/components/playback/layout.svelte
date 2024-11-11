@@ -40,7 +40,7 @@
 
     //Constants
     const PLAYBACK_API_URL =
-      "https://view.lenscorp.cloud/onlineplayback/generate-stream";
+      "https://vms.lenscorp.cloud/onlineplayback/generate-stream";
   
     // Functions
     function updateVideoBackgroundWidth(index: number) {

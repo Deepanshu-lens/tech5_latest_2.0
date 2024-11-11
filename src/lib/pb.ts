@@ -1,4 +1,5 @@
 import PocketBase from "pocketbase";
-const pb = new PocketBase("https://pocketbase.lenscorp.cloud");
+
+const pb = new PocketBase("https://vms.lenscorp.cloud");
 
 export default pb;

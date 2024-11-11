@@ -74,7 +74,7 @@
   let:pages
   let:currentPage
 >
-  <Pagination.Content class="mt-2">
+  <Pagination.Content>
     <Pagination.Item>
       <Pagination.PrevButton
         on:click={() => prevPage()}

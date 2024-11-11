@@ -95,6 +95,26 @@ export const nodeSchema = z.lazy(() =>
   })
 );
 
+export const eventSchema = z.lazy(() =>
+  z.object({
+    camera: z.string(),
+    score: z.number().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    frameImage: z.string().optional(), // Assuming this might be a URL or base64 string for the image
+    frameId: z.string().optional(),
+    severity: z
+      .enum(["critical", "high", "medium", "low", "information"])
+      .optional(),
+    type: z.enum(["face", "fire", "person"]).optional(),
+    feature: z.record(z.any()).optional(),
+    matchScore: z.number().optional(),
+    sparshID: z.string().optional(),
+    boxes: z.record(z.any()).optional(),
+  })
+);
+
 export type User = z.infer<typeof userSchema>;
 export type Camera = z.infer<typeof cameraSchema>;
 export type Node = z.infer<typeof nodeSchema>;
+export type Event = z.infer<typeof eventSchema>;

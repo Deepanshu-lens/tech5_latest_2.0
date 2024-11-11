@@ -45,7 +45,7 @@
         streamElement.setAttribute(
           "data-url",
           `
-wss://view.lenscorp.cloud/api/ws?src=${camera.id}_FULL`
+wss://view.lenscorp.cloud/api/ws?src=${camera.id}`
         );
       }
     },

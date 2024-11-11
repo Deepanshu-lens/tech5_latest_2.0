@@ -43,7 +43,9 @@
         if (window.api) {
           window.api.navigate("/login");
         } else {
-          const isLoginPage = window.location.pathname === "/login";
+          const isLoginPage =
+            window.location.pathname === "/login" ||
+            window.location.pathname === "/register";
           if (!isLoginPage) window.location.href = "/login";
         }
       }

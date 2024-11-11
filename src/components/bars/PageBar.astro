@@ -1,8 +1,7 @@
 ---
-import Avatar from "../avatar/Avatar.astro";
-import Profile from "../avatar/Profile.astro";
-import PageBarItems from "./PageBarItems.astro";
-import { user } from "@/stores";
+import PageBarItems from "./PageBarItems.svelte";
+import Avatar from "@/components/avatar/Avatar.svelte";
+// import Avatar from "@/components/avatar/test.svelte";
 
 interface Props {
   location?: "left" | "top" | "right" | "bottom";
@@ -36,13 +35,7 @@ const isVertical = location === "left" || location === "right";
   <nav
     class=`${isVertical?"flex flex-col space-y-4 flex-grow justify-center w-full" : "flex flex-grow justify-center"}`
   >
-    <PageBarItems {isVertical} server:defer>
-      <div slot="fallback">Loading...</div>
-    </PageBarItems>
+    <PageBarItems {isVertical} client:only="svelte" />
   </nav>
-
-  <!-- User Information at the Bottom for Vertical Layouts -->
-  <div class=`${isVertical ? "mt-auto" : ""} flex items-center space-x-2`>
-    <Profile {isVertical}  server:defer/>
-  </div>
+  <Avatar client:only="svelte" />
 </header>

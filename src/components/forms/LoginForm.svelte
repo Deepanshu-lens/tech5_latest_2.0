@@ -1,42 +1,79 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import Icon from "@iconify/svelte";
+  import pb from "@/lib/pb";
   import { Input } from "@/components/ui/input";
+  import { userSchema } from "@/types";
   import { toast } from "svelte-sonner";
-  import { actions, isInputError } from "astro:actions";
+  import { validator } from "@felte/validator-zod";
+  import Icon from "@iconify/svelte";
+  import { createForm } from "felte";
+  import { user } from "@/stores";
 
-  let errors: {
-    email?: string[] | string | undefined;
-    password?: string[] | string | undefined;
-  } = {
-    email: "",
-    password: "",
-  };
+  if (pb.authStore.token) {
+    console.log("HAVE IT");
+    pb.authStore.clear();
+  }
 
-  const onSubmit = async (e: Event) => {
-    e.preventDefault();
-    const data = new FormData(e.target as HTMLFormElement);
-    const email = data.get("email")?.toString() ?? "";
-    const password = data.get("password")?.toString() ?? "";
-    const result = await actions.auth.login({ email, password });
-    errors = {
-      email: "",
-      password: "",
-    };
-    if (result.error) {
-      if (!isInputError(result.error)) {
-        toast.error(result.error.message);
-      } else {
-        errors = result.error.fields;
+  if (window.api) {
+    window.api.invoke("clear-auth-token");
+  } else {
+    localStorage.removeItem("pb_auth_token");
+  }
+
+  const loginSchema = userSchema.pick({ email: true });
+
+  const { form, errors, reset, isSubmitting } = createForm({
+    initialValues: { email: "", password: "" },
+    extend: validator({ schema: loginSchema }),
+    onSubmit: async (values) => {
+      console.log("Form submitted with:", values);
+      const response = await login(values.email, values.password);
+      if (!response) {
+        reset();
+        return;
       }
-      return;
+      if (window.api) {
+        window.api.navigate("/index");
+      } else {
+        window.location.href = "/";
+      }
+    },
+    onError: (err) => {
+      console.log("Form validation failed:", err);
+    },
+  });
+
+  async function login(email: string, password: string) {
+    let authData;
+    try {
+      authData = await pb.collection("users").authWithPassword(email, password);
+    } catch (error: any) {
+      if (error.message === "Failed to authenticate.") {
+        toast.error("Invalid email or password. Please try again.");
+        return;
+      }
+      toast.error("Authentication failed. Please try again.");
     }
-    localStorage.setItem("pb_auth_token", result?.data.token);
-    window.location.href = "/";
-  };
+
+    if (authData) {
+      console.log(authData);
+      user.set(authData.record);
+      if (window.api) {
+        await window.api.invoke("save-auth-token", pb.authStore.token);
+      } else {
+        localStorage.setItem("pb_auth_token", pb.authStore.token);
+      }
+      return authData;
+    }
+    toast.error("Authentication failed. Please try again.");
+    return;
+  }
+
+  // $: $user && window && window.api
+  //   ? window.api.navigate("/index")
+  //   : (window.location.href = "/");
 </script>
 
-<form class="space-y-4 w-full" method="POST" on:submit={onSubmit}>
+<form use:form class="space-y-4 w-full">
   <div class="grid w-full max-w-sm items-center gap-1.5">
     <div class="relative">
       <Icon
@@ -51,8 +88,8 @@
       />
     </div>
     <div class="text-rose-500 text-xs">
-      {#if errors.email}
-        {errors.email}
+      {#if $errors.email}
+        {$errors.email}
       {/if}
     </div>
   </div>
@@ -71,18 +108,23 @@
       />
     </div>
     <div class="text-rose-500 text-xs">
-      {#if errors.password}
-        {errors.password}
+      {#if $errors.password}
+        {$errors.password}
       {/if}
     </div>
   </div>
 
   <div class="flex flex-col items-center justify-between mb-10 sm:mb-0">
     <button
+      disabled={$isSubmitting}
       class="bg-[#015A62] hover:bg-[#015A62]/[.4] text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline"
       type="submit"
     >
-      Log In
+      {#if $isSubmitting}
+        Submitting ...
+      {:else}
+        Sign In
+      {/if}
     </button>
   </div>
 </form>

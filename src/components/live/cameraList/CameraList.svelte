@@ -76,11 +76,12 @@
         <CameraActionButton action="add" icon />
       </div>
     </div>
+    <div class="overflow-y-auto max-h-[calc(100vh-12rem)]">
     {#each currentCameras as camera, index}
       <article
-        class={`flex items-center p-4 dark:border bg-accent my-4
+        class="flex items-center p-4 dark:border bg-accent my-4
               hover:border hover:border-primary space-x-4
-              rounded-xl text-sm z-10 w-full px-4`}
+              rounded-xl text-sm z-10 w-full px-4"
       >
         <Icon
           icon="material-symbols:menu"
@@ -104,5 +105,6 @@
         </div>
       </article>
     {/each}
+  </div>
   </div>
 </section>
