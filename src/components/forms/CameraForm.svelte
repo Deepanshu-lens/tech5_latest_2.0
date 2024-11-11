@@ -66,7 +66,7 @@
           subUrl: urlLink,
           motionSensitivity: 33, // Example value
           node: $selectedNode,
-          save: false,
+          save: true,
         };
         pb.autoCancellation(false);
         const record = await pb.collection("camera").create(data);
