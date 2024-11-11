@@ -100,7 +100,9 @@
                       </div>
                     {/each}
                   {:else}
-                    <div class="p-3">No events yet</div>
+                    <div class="p-3">
+                      No events yet. Displaying only live events.
+                    </div>
                   {/if}
                 </div>
               </div>

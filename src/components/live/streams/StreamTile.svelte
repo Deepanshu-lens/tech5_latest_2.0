@@ -89,7 +89,6 @@
     await getHeatMapImage(id);
     loading = false;
   };
-
 </script>
 
 <div
@@ -125,10 +124,8 @@
       class="absolute right-10 bottom-2 rounded-md transition-opacity duration-300 flex items-center gap-x-2 w-10"
     >
       <span class="size-2 bg-green-700 rounded-full ml-2"></span>
-      <Button
-        variant="ghost"
-        class="text-white"
-        on:click={() => getHeatImg(id)}>H</Button
+      <Button variant="ghost" class="text-white" on:click={() => getHeatImg(id)}
+        >H</Button
       >
     </div>
   </ImagePreviewModal> -->

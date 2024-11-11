@@ -20,26 +20,35 @@
   // };
 
   // $: if ($selectedNode) getInitialEvents();
-
-  try {
-    pb.collection("events").subscribe("*", (e: any) => {
-      if (e.action === "create") {
-        liveEvents.update((current: any) => [...current, e.record]);
-        // toast.success("New event created", {
-        //   description: `${e.record.description} on ${e.record.deviceName}`,
-        // });
-      } else if (e.action === "update") {
-        liveEvents.update((current: any) =>
-          current.map((cam: any) => (cam.id === e.record.id ? e.record : cam))
-        );
-      } else if (e.action === "delete") {
-        liveEvents.update((current: any) =>
-          current.filter((cam: any) => cam.id !== e.record.id)
-        );
-      }
-    });
-  } catch (error) {
-    console.error("Failed realtime events");
+  $: if ($selectedNode) {
+    try {
+      pb.collection("events").subscribe(
+        "*",
+        (e: any) => {
+          if (e.action === "create") {
+            liveEvents.update((current: any) => [...current, e.record]);
+            // toast.success("New event created", {
+            //   description: `${e.record.description} on ${e.record.deviceName}`,
+            // });
+          } else if (e.action === "update") {
+            liveEvents.update((current: any) =>
+              current.map((cam: any) =>
+                cam.id === e.record.id ? e.record : cam
+              )
+            );
+          } else if (e.action === "delete") {
+            liveEvents.update((current: any) =>
+              current.filter((cam: any) => cam.id !== e.record.id)
+            );
+          }
+        },
+        {
+          filter: `node.id?="${$selectedNode}"`,
+        }
+      );
+    } catch (error) {
+      console.error("Failed realtime events");
+    }
   }
 
   //todo: find something better than this

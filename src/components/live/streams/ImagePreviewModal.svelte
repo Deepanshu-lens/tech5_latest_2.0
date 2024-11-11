@@ -14,11 +14,11 @@
 
 <Dialog.Root onOpenChange={imageHandler}>
   <Dialog.Trigger><slot /></Dialog.Trigger>
-  <Dialog.Content class="sm:max-w-[600px] z-[70] scale-90 sm:scale-100">
+  <Dialog.Content class="sm:max-w-[600px] z-[70] ">
     <Dialog.Header>
       <Dialog.Title>Heat Map</Dialog.Title>
     </Dialog.Header>
-    <div class="py-4">
+    <div class="">
       {#if loading}
         <p>Fetching ...</p>
       {:else if !$imageUrl}
