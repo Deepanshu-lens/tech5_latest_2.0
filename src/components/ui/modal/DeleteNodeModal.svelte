@@ -1,5 +1,5 @@
 <script lang="ts">
-  import pb from "@/lib/sharedPB";
+  import pb from "@/lib/pb";
   import * as AlertDialog from "@/components/ui/alert-dialog";
   import { selectedNode, nodes, user } from "@/stores";
   const deleteNode = async () => {

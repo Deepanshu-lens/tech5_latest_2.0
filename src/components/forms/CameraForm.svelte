@@ -44,7 +44,7 @@
     },
   });
 
-  const streamUri = async (index:any) => {
+  const streamUri = async (index: any) => {
     const res = await fetch(`${BASE_URI}/stream-uri/${index}`, {
       method: "GET",
       headers: {
@@ -87,9 +87,8 @@
           name: cameraName,
           url: mainUrl,
           subUrl,
-          motionSensitivity: 33, // Example value
           node: $selectedNode,
-          save: false,
+          save: true,
         };
 
         const record = await pb.collection("camera").create(data);

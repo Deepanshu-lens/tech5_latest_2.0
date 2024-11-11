@@ -1,8 +1,7 @@
 <script lang="ts">
-  import pb from "@/lib/sharedPB";
+  import pb from "@/lib/pb";
   import { selectedNode } from "@/stores";
   import * as Dialog from "@/components/ui/dialog";
-  import AddCameraForm from "@/components/Forms/AddCamera.svelte";
   import { Button } from "@/components/ui/button";
   import { Input } from "@/components/ui/input";
   import { Label } from "@/components/ui/label";
@@ -39,7 +38,7 @@
         streamElement.setAttribute(
           "data-url",
           `
-wss://view.lenscorp.cloud/api/ws?src=${camera.id}_FULL`,
+wss://view.lenscorp.cloud/api/ws?src=${camera.id}_FULL`
         );
       }
     },
@@ -109,8 +108,10 @@ wss://view.lenscorp.cloud/api/ws?src=${camera.id}_FULL`,
         </div>
       </div>
       <div class="flex flex-1 flex-col mx-auto">
-        <Button variant="brand" type="submit" class="bg-[#015A62] text-white font-semibold"
-          >Confirm</Button
+        <Button
+          variant="brand"
+          type="submit"
+          class="bg-[#015A62] text-white font-semibold">Confirm</Button
         >
       </div>
     </form>

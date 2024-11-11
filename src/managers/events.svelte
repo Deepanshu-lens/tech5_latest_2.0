@@ -1,6 +1,6 @@
 <script lang="ts">
   import pb from "@/lib/pb";
-  import { liveEvents, selectedNode } from "@/stores";
+  import { liveEvents, nodes, selectedNode } from "@/stores";
   import { toast } from "svelte-sonner";
   import { activePanel } from "@/stores";
   import { type Event } from "@/types";
@@ -23,19 +23,21 @@
 
   try {
     pb.collection("events").subscribe("*", (e: any) => {
-      if (e.action === "create") {
-        liveEvents.update((current: any) => [...current, e.record]);
-        // toast.success("New event created", {
-        //   description: `${e.record.description} on ${e.record.deviceName}`,
-        // });
-      } else if (e.action === "update") {
-        liveEvents.update((current: any) =>
-          current.map((cam: any) => (cam.id === e.record.id ? e.record : cam))
-        );
-      } else if (e.action === "delete") {
-        liveEvents.update((current: any) =>
-          current.filter((cam: any) => cam.id !== e.record.id)
-        );
+      if (e.record.node.includes($selectedNode)) {
+        if (e.action === "create") {
+          liveEvents.update((current: any) => [...current, e.record]);
+          // toast.success("New event created", {
+          //   description: `${e.record.description} on ${e.record.deviceName}`,
+          // });
+        } else if (e.action === "update") {
+          liveEvents.update((current: any) =>
+            current.map((cam: any) => (cam.id === e.record.id ? e.record : cam))
+          );
+        } else if (e.action === "delete") {
+          liveEvents.update((current: any) =>
+            current.filter((cam: any) => cam.id !== e.record.id)
+          );
+        }
       }
     });
   } catch (error) {

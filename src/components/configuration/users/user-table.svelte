@@ -47,14 +47,14 @@
           Filters
         </Button>
        
-        {#if $user?.role.name !== 'user'}
+        <!-- {#if $user?.role.name !== 'user'} -->
           <AddUser parentId={$user?.id}>
             <Button>
               <Plus class="w-4 h-4 mr-2" />
               Add User
             </Button>
           </AddUser>
-        {/if}
+        <!-- {/if} -->
       </div>
     </div>
 

@@ -6,7 +6,6 @@
   (async () => {
     try {
       // Fetch initial data
-
       const localNodes = await pb.collection("node").getFullList<Node>({
         fields: "id,name",
         filter: `session.id?="${pb.authStore.model.session[0]}"`,
@@ -14,7 +13,8 @@
       });
       nodes.set(localNodes);
       localNodes.length > 0 &&
-        (localStorage.getItem("selectedNode")
+        (localStorage.getItem("selectedNode") &&
+        localNodes.filter((l) => l.id === $selectedNode).length > 0
           ? selectedNode.set(localStorage.getItem("selectedNode"))
           : selectedNode.set(localNodes[0].id));
     } catch (error) {
@@ -43,5 +43,4 @@
   } catch (error) {
     console.error("Failed realtime camera");
   }
-
 </script>
