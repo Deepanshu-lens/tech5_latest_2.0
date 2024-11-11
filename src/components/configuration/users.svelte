@@ -14,7 +14,8 @@
     import NavbarTable from "./users/navbar-table.svelte";
     import UserTable from "./users/user-table.svelte";
     import LiveTable from "./permissions/live-table.svelte";
-
+    import Policies from "./policies.svelte";
+    
     // Type Definitions
     interface PermissionItem {
         collectionId: string;
@@ -341,8 +342,7 @@
       {/if}
     {/if}
     {#if selected === 3}
-      <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>
-      <h2 class="font-medium px-6 mb-4">Policies</h2>
+      <Policies />
     {/if}
     <!-- {#if selected === 4}
       <div class="h-[1px] dark:bg-[#292929] w-[96%] mb-8 bg-[#e0e0e0]"></div>
