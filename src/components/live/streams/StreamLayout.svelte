@@ -10,8 +10,11 @@
   import pb from "@/lib/pb";
   import StreamTile from "./StreamTile.svelte";
   import Pagination from "./pagination/Pagination.svelte";
+  import { onMount } from "svelte";
+  import { writable } from "svelte/store";
 
   export let STREAM_URL = "";
+  const isMobile = writable(false);
 
   // // Function to determine the grid style based on the number of cameras
   const layoutConfigs = {
@@ -33,6 +36,12 @@
       console.log("selectedlayout", layoutIndex);
       return layoutConfigs[layoutIndex];
     }
+
+    if ($isMobile) {
+      // Mobile view: 1 column and multiple rows based on cameraCount
+      return `grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(${cameraCount}, 150px);`;
+    }
+
     switch (cameraCount) {
       case 1:
         return "grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);";
@@ -62,6 +71,19 @@
     const record = await pb.collection("node").create(data);
     selectedNode.set(record.id);
   };
+
+  onMount(() => {
+    const updateScreenSize = () => {
+      isMobile.set(window.innerWidth <= 768);
+    };
+
+    updateScreenSize();
+    window.addEventListener("resize", updateScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", updateScreenSize);
+    };
+  });
 </script>
 
 {#if $nodes && $user}
@@ -104,15 +126,15 @@
       </form>
     </div>
   {:else}
-    <div class="flex flex-col flex-grow">
+    <div class="flex flex-col flex-grow mt-4">
       <div
-        class="camera-grid"
-        style={gridStyle + " height: calc(100vh - 7rem);"}
+        class="grid grid-cols-1 gap-4 p-4 w-full lg:grid-cols-4"
+        style={gridStyle + " height: calc(100vh - 7rem); overflow-y: auto;"}
       >
         {#key $cameras}
           {#each $cameras as camera}
             <StreamTile
-              name={camera.name}
+              name={camera?.name}
               id={camera.id}
               url={`${STREAM_URL}/api/ws?src=${camera.id}`}
             ></StreamTile>
@@ -126,12 +148,3 @@
     </div>
   {/if}
 {/if}
-
-<style>
-  .camera-grid {
-    display: grid;
-    gap: 1rem;
-    padding: 16px;
-    width: 100%;
-  }
-</style>

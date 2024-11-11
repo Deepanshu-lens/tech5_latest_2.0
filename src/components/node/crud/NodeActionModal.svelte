@@ -58,12 +58,14 @@
       .collection("node")
       .delete($nodes.find((n) => n.id === $selectedNode)?.id);
   };
+
+  $: console.log(action, "action here");
 </script>
 
 {#if action === "add"}
   <Dialog.Root bind:open={modalOpen}>
     <Dialog.Trigger><slot /></Dialog.Trigger>
-    <Dialog.Content class="sm:max-w-[48rem]">
+    <Dialog.Content class="sm:max-w-[48rem] h-[90vh] overflow-auto lg:h-auto">
       <Dialog.Header>
         <Dialog.Title class="border-b pb-4"
           >{action.charAt(0).toUpperCase() + action.slice(1)} Node</Dialog.Title
@@ -141,7 +143,7 @@
               <AddCameraForm bind:cameraName bind:mainUrl bind:subUrl />
             </Card.Content>
             <Card.Footer>
-              <Button>Save password</Button>
+              <Button>Save camera</Button>
             </Card.Footer>
           </Card.Root>
         </Tabs.Content>

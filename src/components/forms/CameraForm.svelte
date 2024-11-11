@@ -13,82 +13,130 @@
 
   import { createForm } from "felte";
   import { validator } from "@felte/validator-zod";
+  import { toast } from "svelte-sonner";
 
   export let cameraName = "";
   export let mainUrl = "";
   export let subUrl = "";
   export let doneSubmit = false;
-
-  // const validator = ({ schema }) => ({
-  //   validate: (values) => {
-  //     const result = schema.safeParse(values);
-  //     console.log("re", result);
-  //     if (result.success) {
-  //       // If validation passed, return an empty object (no errors)
-  //       return {};
-  //     } else {
-  //       // If validation failed, map the errors to return them in the expected format
-  //       return result.error.format();
-  //     }
-  //   },
-  // });
+  let userName = "";
+  let password = "";
+  let ipAddress = "";
+  let httpPort = "";
+  let tabValue = "url";
+  let BASE_URI = "https://vms.lenscorp.cloud/onvif";
 
   const { form, errors, reset, isSubmitting } = createForm({
     initialValues: { name: "", url: "", subUrl: "" },
-    // extend: validator({ schema: cameraSchema }),
-    extend: validator({
-      schema: cameraSchema.schema.omit({ id: true, save: true }),
-    }),
+    //todo:this needs to be implimented asap
+    // extend: validator({
+    //   schema: cameraSchema.schema.omit({
+    //     id: true,
+    //   save: true,
+    //   url:true
+    //   }),
+    // }),
     onSubmit: async (values: any) => {
-      console.log(
-        cameraSchema.schema.omit({ id: true, save: true }).safeParse(values)
-      );
-      console.log("Form submitted with:", values);
       addCamera();
-      // const response = await login(values.email, values.password);
-      // if (!response) {
-      //   reset();
-      //   return;
-      // }
-      // if (window.api) {
-      //   window.api.navigate("/index");
-      // } else {
-      //   window.location.href = "/";
-      // }
     },
     onError: (err: any) => {
       console.error("Form validation failed:", err);
     },
   });
 
-  const addCamera = async () => {
-    try {
-      // Create the camera record in Pocketbase
-      const data = {
-        name: cameraName,
-        url: mainUrl,
-        subUrl,
-        motionSensitivity: 33, // Example value
-        node: $selectedNode,
-        save: false,
-      };
+  const streamUri = async (index:any) => {
+    const res = await fetch(`${BASE_URI}/stream-uri/${index}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (data.uri) {
+      const url = data.uri.split("//");
+      const url1 = url[0];
+      const url2 = url[1];
 
-      // Push the data to Pocketbase (to the 'cameras' collection, for example)
-      const record = await pb.collection("camera").create(data);
-      console.log("Camera added:", record);
-      doneSubmit = true;
-    } catch (error) {
-      console.error("Failed to add camera:", error);
+      const urlLink = `${url1}//${userName}:${password}@${url2}`;
+      console.log(urlLink, "urlLink");
+      try {
+        const data = {
+          name: cameraName,
+          url: urlLink,
+          subUrl: urlLink,
+          motionSensitivity: 33, // Example value
+          node: $selectedNode,
+          save: false,
+        };
+        pb.autoCancellation(false);
+        const record = await pb.collection("camera").create(data);
+        toast.success("Camera added successfully");
+        doneSubmit = true;
+      } catch (error) {
+        console.error("Failed to add camera:", error);
+      }
+    }
+  };
+
+  const addCamera = async () => {
+    console.log(tabValue, "tabValue");
+    if (tabValue === "url") {
+      console.log("URL tab api called");
+      try {
+        const data = {
+          name: cameraName,
+          url: mainUrl,
+          subUrl,
+          motionSensitivity: 33, // Example value
+          node: $selectedNode,
+          save: false,
+        };
+
+        const record = await pb.collection("camera").create(data);
+        console.log("Camera added:", record);
+        doneSubmit = true;
+      } catch (error) {
+        console.error("Failed to add camera:", error);
+      }
+    } else {
+      console.log("Details tab api called");
+      await fetch(`${BASE_URI}/initialize`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: cameraName,
+          hostname: ipAddress,
+          username: userName,
+          password: password,
+          port: Number(httpPort),
+          timeout: 10000,
+        }),
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          await streamUri(data.index);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Failed to add camera via ONVIF", {
+            description: "Incompatible SOAP version",
+          });
+          doneSubmit = false;
+        });
     }
   };
 </script>
 
 <form use:form class="space-y-4 mt-4">
   <!-- Manual/Automatic Mode -->
-  <div class="flex items-center justify-between border-b pb-8">
-    <Label>Select method of adding camera</Label>
+  <div
+    class="flex flex-col sm:flex-row items-center justify-between border-b pb-8"
+  >
+    <Label class="text-left mb-2">Select method of adding camera</Label>
     <Select.Root>
-      <Select.Trigger class="w-24">
+      <Select.Trigger class="w-full sm:w-1/3">
         <Select.Value placeholder="Manual" />
       </Select.Trigger>
       <Select.Content>
@@ -97,9 +145,10 @@
       </Select.Content>
     </Select.Root>
   </div>
+
   <!-- Single/Bulk Upload -->
-  <div class="flex items-center justify-between pb-4">
-    <Label>Insert a new camera to node</Label>
+  <div class="flex flex-col sm:flex-row items-center justify-between pb-4">
+    <Label class="text-left mb-2">Insert a new camera to node</Label>
     <div class="flex items-center space-x-2">
       <Label for="single" class="text-xs font-normal">Single Upload</Label>
       <Switch id="bulk" />
@@ -108,112 +157,166 @@
   </div>
 
   <!-- Camera Name -->
-  <!-- rtsp://admin@admin:123.123.123.0/ch01 -->
-  <div class="flex items-center justify-between pb-4">
-    <Label>Camera Name</Label>
-    <div class="w-full">
-      <Input
-        type="text"
-        name="name"
-        placeholder="Home-Garage"
-        class=""
-        bind:value={cameraName}
-      />
-      <div class="text-rose-500 text-xs pt-2">
-        {#if $errors.name}
-          {$errors.name}
-        {/if}
-      </div>
+  <div class="flex flex-col pb-4">
+    <Label class="text-left mb-2">Camera Name</Label>
+    <Input
+      type="text"
+      name="name"
+      placeholder="Home-Garage"
+      bind:value={cameraName}
+    />
+    <div class="text-rose-500 text-xs pt-2">
+      {#if $errors.name}
+        {$errors.name}
+      {/if}
     </div>
   </div>
 
-  <Tabs.Root value="url">
+  <Tabs.Root bind:value={tabValue}>
     <Tabs.List class="grid w-full grid-cols-2">
       <Tabs.Trigger value="url">Using URL</Tabs.Trigger>
-      <Tabs.Trigger value="details">Using Details</Tabs.Trigger>
+      <Tabs.Trigger value="details" disabled>Using Details</Tabs.Trigger>
     </Tabs.List>
     <Tabs.Content value="url" class="py-2">
-      <div class="flex items-center justify-between pb-4">
-        <Label>Main URL</Label>
-        <div class="w-full">
-          <Input
-            type="text"
-            name="url"
-            placeholder="rtsp://admin:password@123.123.123.123/stream/1"
-            class="text-xs"
-            bind:value={mainUrl}
-          />
-          <div class="text-rose-500 text-xs pt-2">
-            {#if $errors.url}
-              {$errors.url}
-            {/if}
-          </div>
+      <div class="flex flex-col pb-4">
+        <Label class="text-left mb-2">Main URL</Label>
+        <Input
+          type="text"
+          name="url"
+          placeholder="rtsp://admin:password@123.123.123.123/stream/1"
+          bind:value={mainUrl}
+        />
+        <div class="text-rose-500 text-xs pt-2">
+          {#if $errors.url}
+            {$errors.url}
+          {/if}
         </div>
       </div>
-      <div class="flex items-center justify-between pb-4">
-        <Label>Sub URL</Label>
-        <div class="w-full">
-          <Input
-            type="text"
-            name="subUrl"
-            placeholder="rtsp://admin:password@123.123.123.123/stream/2"
-            class=" text-xs"
-            bind:value={subUrl}
-          />
-          <div class="text-rose-500 text-xs pt-2">
-            {#if $errors.subUrl}
-              {$errors.subUrl}
-            {/if}
-          </div>
+      <div class="flex flex-col pb-4">
+        <Label class="text-left mb-2">Sub URL</Label>
+        <Input
+          type="text"
+          name="subUrl"
+          placeholder="rtsp://admin:password@123.123.123.123/stream/2"
+          bind:value={subUrl}
+        />
+        <div class="text-rose-500 text-xs pt-2">
+          {#if $errors.subUrl}
+            {$errors.subUrl}
+          {/if}
         </div>
       </div>
     </Tabs.Content>
-    <Tabs.Content value="details">Change your password here.</Tabs.Content>
+    <Tabs.Content value="details">
+      <div class="flex items-center justify-between pb-4">
+        <Label>User Name</Label>
+        <div class="w-[75%]">
+          <Input
+            type="text"
+            name="userName"
+            placeholder="Camera portal username"
+            class=" text-xs"
+            bind:value={userName}
+          />
+          <div class="text-rose-500 text-xs pt-2">
+            {#if $errors.userName}
+              {$errors.userName}
+            {/if}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pb-4">
+        <Label>Password</Label>
+        <div class="w-[75%]">
+          <Input
+            type="password"
+            name="password"
+            placeholder="Camera portal password"
+            class="text-xs"
+            bind:value={password}
+          />
+          <div class="text-rose-500 text-xs pt-2">
+            {#if $errors.password}
+              {$errors.password}
+            {/if}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pb-4">
+        <Label>IP Address</Label>
+        <div class="w-[75%]">
+          <Input
+            type="text"
+            name="ipAddress"
+            placeholder="IP associated with camera"
+            class="text-xs"
+            bind:value={ipAddress}
+          />
+          <div class="text-rose-500 text-xs pt-2">
+            {#if $errors.ipAddress}
+              {$errors.ipAddress}
+            {/if}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pb-4">
+        <Label>HTTP Port</Label>
+        <div class="w-[75%]">
+          <Input
+            type="text"
+            name="httpPort"
+            placeholder="Port"
+            class=" text-xs"
+            bind:value={httpPort}
+          />
+          <div class="text-rose-500 text-xs pt-2">
+            {#if $errors.httpPort}
+              {$errors.httpPort}
+            {/if}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center space-x-1">
+        <Label for="ssl" class="text-xs font-normal w-[25%]">SSL</Label>
+        <Switch id="ssl" />
+      </div>
+    </Tabs.Content>
   </Tabs.Root>
 
-  <div class="flex flex-col items-start justify-between pb-4 w-full">
-    <Label>Features</Label>
-    <div class="flex items-center justify-between py-4 space-x-4">
+  <div class="flex flex-col pb-4">
+    <Label class="text-left mb-2">Features</Label>
+    <div
+      class="flex flex-col md:flex-row space-y-2 py-4 md:space-x-4 md:items-center"
+    >
       <div class="flex items-center space-x-1">
         <Switch id="feedSaving" />
-        <Label for="feedSaving" class="text-xs font-normal">Feed Saving</Label>
+        <Label for="feedSaving" class="text-xs font-normal mb-2"
+          >Feed Saving</Label
+        >
       </div>
-
       <div class="flex items-center space-x-1">
         <Switch id="vehicleScan" />
         <Label for="vehicleScan" class="text-xs font-normal">Vehicle Scan</Label
         >
       </div>
-
       <div class="flex items-center space-x-1">
         <Switch id="faceScan" />
-        <Label for="faceScan" class="text-xs font-normal">Face Scan</Label>
+        <Label class="text-left mb-2" for="faceScan">Face Scan</Label>
       </div>
-
       <div class="flex items-center space-x-2">
         <Switch id="priority" />
-        <Label for="priority" class="text-xs font-normal">Priority</Label>
+        <Label class="text-left mb-2" for="priority">Priority</Label>
       </div>
     </div>
     <div class="flex items-center justify-between pb-4 w-full space-x-12">
-      <Label>Motion Sensitivity</Label>
+      <Label class="text-left mb-2">Motion Sensitivity</Label>
       <Slider value={[33]} max={100} step={1} />
     </div>
   </div>
-  <!-- <button
-    disabled={$isSubmitting}
-    class="bg-[#015A62] hover:bg-[#015A62]/[.4] text-white font-bold py-2 px-4 rounded-md w-full focus:outline-none focus:shadow-outline"
-    type="submit"
-  >
-    {#if $isSubmitting}
-      Submitting ...
-    {:else}
-      Sign In
-    {/if}
-  </button> -->
-  <div class="flex flex-1 flex-col mx-auto">
-    <Button type="submit" class="bg-[#015A62] text-white font-semibold"
-      >Confirm</Button
-    >
+
+  <div class="flex flex-col mx-auto">
+    <Button type="submit" class="bg-[#015A62] text-white font-semibold">
+      Confirm
+    </Button>
   </div>
 </form>

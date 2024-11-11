@@ -9,6 +9,7 @@
     value: $selectedNode,
     label: $nodes.find((n) => n.id === $selectedNode)?.name,
   };
+
 </script>
 
 <Select.Root
@@ -19,7 +20,7 @@
   }}
   bind:selected={selectedValue}
 >
-  <Select.Trigger class="w-full max-w-xs">
+  <Select.Trigger class="lg:w-full w-[19rem]">
     <span class="text-muted-foreground">Node:</span>
     <Select.Value placeholder="Cameras" />
   </Select.Trigger>

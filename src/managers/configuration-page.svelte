@@ -58,8 +58,9 @@
     {#each ["Remote", "Stream", "Recording", "System", "Camera", "License", "User"] as section}
       <span class="group flex flex-col gap-0.5 items-center justify-center">
         <button
+          disabled={section === "Camera"}
           on:click={() => handleButtonClick(section as Section)}
-          class={$currentSection !== section ? inactiveButtonClass : activeButtonClass}
+          class={($currentSection !== section ? inactiveButtonClass : activeButtonClass) + (section === "Camera" ? " opacity-50" : "")}
         >
           {#if section === "Remote"}
             <Router class="h-[22px] w-[22px]" />
