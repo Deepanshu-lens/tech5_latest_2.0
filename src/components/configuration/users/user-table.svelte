@@ -49,7 +49,7 @@
        
         <!-- {#if $user?.role.name !== 'user'} -->
           <AddUser parentId={$user?.id}>
-            <Button>
+            <Button variant="brand">
               <Plus class="w-4 h-4 mr-2" />
               Add User
             </Button>

@@ -601,16 +601,16 @@
         <div class="px-4 py-4 flex flex-col gap-1">
           <Tabs.Root value="byDate">
             <Tabs.List
-              class="w-full bg-white dark:bg-white/10 text-black dark:text-white border mb-4"
+              class="w-full border mb-4"
             >
               <Tabs.Trigger
                 value="byDate"
-                class="w-1/2 rounded-md data-[state=active]:bg-brand-foreground dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                class="w-1/2 rounded-md"
                 >By Date</Tabs.Trigger
               >
               <Tabs.Trigger
                 value="byTime"
-                class="w-1/2 rounded-md data-[state=active]:bg-brand-foreground dark:data-[state=active]:bg-black data-[state=active]:text-white"
+                class="w-1/2 rounded-md"
                 >By Time</Tabs.Trigger
               >
             </Tabs.List>
@@ -683,6 +683,7 @@
   
               <div class="w-full">
                 <Button
+                  variant="brand"
                   class="w-full py-2 text-sm font-medium mt-4 rounded-md"
                   on:click={fetchPlaybackData}
                   disabled={$selectedChannels.length === 0 || !searchDate || $isFetching}
@@ -746,6 +747,7 @@
   
               <div class="w-full">
                 <Button
+                  variant="brand"
                   class="w-full py-2 text-sm font-medium mt-4 rounded-md"
                   on:click={fetchPlaybackData}
                   disabled={$selectedChannels.length === 0 || !searchDate || $isFetching}

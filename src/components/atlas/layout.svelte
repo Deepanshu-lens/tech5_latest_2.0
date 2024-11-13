@@ -225,9 +225,10 @@
           </Label>
           <Label class="flex flex-row items-center gap-4">
             SSL
-            <Switch bind:checked={ssl} class="data-[state=checked]:bg-brand-foreground dark:data-[state=checked]:bg-brand"/>
+            <Switch bind:checked={ssl}/>
           </Label>
           <Button
+            variant="brand"
             type="button"
             on:click={() => handleSubmit()}
             disabled={!serverIp || !serverPort || !username || !password}
@@ -249,7 +250,7 @@
               {/each}
             </div>
             <AddPanel>
-              <Button class="mt-auto flex items-center gap-1 w-full">
+              <Button  variant="brand" class="mt-auto flex items-center gap-1 w-full">
                 <Plus size={16} />
                 Add Panel
               </Button>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from "@/components/ui/button/button.svelte";
   import Switch from "@/components/ui/switch/switch.svelte";
   import { selectedNode } from "@/stores";
 
@@ -69,7 +70,7 @@
 >
   <!-- Selecting Tabs -->
   <div
-    class="flex items-center justify-center rounded-lg border-black/[.13] dark:border-neutral-700  border-solid border-[1px] p-1 w-[540px] h-[40px] mx-auto mb-10"
+    class="flex items-center justify-center rounded-lg border-black/[.13] dark:border-neutral-700 border-solid border-[1px] p-1 w-[540px] h-[40px] mx-auto mb-10"
   >
     <button
       on:click={() => (selected = 1)}
@@ -281,6 +282,7 @@
       class=" w-[94.5%] my-4 pt-8 shad mx-6 border-black/[.08] border-[1px] border-solid"
     >
       <h2 class="px-6 font-medium mb-4">Audio settings</h2>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
       <div
         class="h-[1px] dark:bg-[#292929] ml-2 mb-4 bg-[#e0e0e0] mt-8 w-[95%]"
       />
@@ -292,12 +294,13 @@
     </div>
   {/if}
 
-  <button
+  <Button
+    variant="brand"
     class="text-white bg-[#015a62] px-10 py-2 rounded-lg mx-6 my-4"
     on:click={handleConfirm}
   >
     Confirm
-  </button>
+  </Button>
 </div>
 
 <style>

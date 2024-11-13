@@ -78,6 +78,7 @@
                   selectedCamerasIdsArr={door.cameraId}
                 >
                   <Button
+                    variant="brand"
                     class="py-1 bg-[#111C09] dark:bg-black dark:text-white flex gap-1.5 items-center"
                     size="sm"
                   >
@@ -85,6 +86,7 @@
                   </Button>
                 </CameraDoor>
                 <Button
+                 variant="brand"
                   class="py-1 bg-[#111C09] dark:bg-black dark:text-white flex gap-1.5 items-center"
                   size="sm"
                   on:click={() => handleUnlock(door.unid)}

@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   // import { addUserLog } from "@/lib/addUserLog";
   import * as Tabs from "@/components/ui/tabs";
+  import Button from "@/components/ui/button/button.svelte";
   let activeTab = "live";
   let delayOptions = [
     { id: 1, label: "No delay" },
@@ -206,12 +207,13 @@
     </Tabs.Content>
   </Tabs.Root>
 
-  <button
+  <Button
+    variant="brand"
     class="text-white bg-[#015a62] px-10 py-2 rounded-lg mx-6 my-4"
     on:click={handleConfirm}
   >
     Confirm
-  </button>
+  </Button>
 </div>
 
 <style>

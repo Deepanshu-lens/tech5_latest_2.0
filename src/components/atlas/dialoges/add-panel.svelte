@@ -126,6 +126,7 @@
           variant="secondary">Cancel</Button
         >
         <Button
+         variant="brand"
           on:click={() => handleSubmit()}
           class="mt-auto flex items-center gap-1 w-full"
         >

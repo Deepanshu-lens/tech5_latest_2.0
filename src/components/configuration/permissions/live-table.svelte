@@ -194,6 +194,6 @@
             </Table.Row>
         {/each}
     </Table.Body>
-    <Button class="mr-auto mb-10" on:click={savePermissions}>Save</Button>
+    <Button variant="brand" class="mr-auto mb-10" on:click={savePermissions}>Save</Button>
 </Table.Root>
   

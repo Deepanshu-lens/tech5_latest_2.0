@@ -345,14 +345,6 @@
       <div class="flex-grow">
         {#if modeAdd === 1}
           <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Node</h2>
-        {:else if modeAdd === 2}
-          <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Sub-node</h2>
-        {:else if modeAdd === 4}
-          <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Server</h2>
-        {/if}
-
-        <!-- Add Node -->
-        {#if modeAdd === 1}
           {#each Array(addNodeCounter) as _, index (index)}
             <div class="mb-4">
               <Label for="node-name">Node Name {index + 1}</Label>
@@ -370,9 +362,8 @@
           >
             <PlusCircle size={18} class="mr-2" /> Add New Node
           </button>
-
-          <!-- Add Sub-node -->
         {:else if modeAdd === 2}
+          <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Sub-node</h2>
           <div class="mb-4">
             <div class="items-center gap-4 py-2">
               <Label for={`node-name`}>Select Node</Label>
@@ -407,271 +398,69 @@
           >
             <PlusCircle size={18} class="mr-2" /> Add Sub Node
           </button>
-
-          <!-- Add Camera Mode -->
         {:else if modeAdd === 3}
+          <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Camera</h2>
           <div class="drop-shadow-md px-2">
             <div class="w-full flex flex-col items-start justify-center py-4 gap-4">
-              <div class="flex-cb w-full border-b pb-2">
-                <div class="flex-1">
-                  <h2 class="text-xl font-bold">Add Camera</h2>
-                </div>
-                <div class="flex items-center justify-center rounded-lg dark:border-neutral-700 border-black border-solid border-[1px] p-1 w-[200px] h-[40px] mx-auto">
-                  <button
-                    on:click={() => (addDevice = 1)}
-                    class={`rounded-lg text-xs leading-[18px] px-[10px] py-[3px] font-medium w-1/2 h-full ${addDevice === 1 ? "text-white bg-[#015a62]" : "bg-transparent"}`}
-                  >Camera</button>
-                  <button
-                    on:click={() => (addDevice = 2)}
-                    class={`rounded-lg text-xs leading-[18px] px-[10px] py-[3px] font-medium w-1/2 h-full ${addDevice === 2 ? "text-white bg-[#015a62]" : "bg-transparent"}`}
-                  >NVR</button>
-                </div>
-              </div>
-
-              {#if addDevice === 1}
-                <!-- Camera Mode Container -->
-                <div class="camera-mode-container">
-                  <div class="space-y-4">
-                    <div class="flex justify-between items-center gap-x-36">
-                      <div class="text-base">Select method of adding camera</div>
-                      <Select.Root bind:value={selectedMethod}>
-                        <Select.Trigger class="w-40 border-none box-shadow-none dark:border-neutral-200">
-                          <Select.Value placeholder="Select method" />
-                        </Select.Trigger>
-                        <Select.Content>
-                          {#each methods as method}
-                            <Select.Item value={method}>{method}</Select.Item>
-                          {/each}
-                        </Select.Content>
-                      </Select.Root>
-                    </div>
-
-                    <div class="flex items-center space-x-8">
-                      <Select.Root bind:value={selectedLens} class="flex-grow dark:text-black dark:placeholder:text-black">
-                        <Select.Trigger class="w-64 bg-gray-100 dark:bg-neutral-500 mt-1 dark:text-black dark:placeholder:text-black">
-                          <Select.Value placeholder="Select lens" class="dark:text-black text-white" />
-                        </Select.Trigger>
-                        <Select.Content>
-                          {#each lenses as lens}
-                            <Select.Item value={lens}>{lens}</Select.Item>
-                          {/each}
-                        </Select.Content>
-                      </Select.Root>
-
-                      <span class={isBulkUpload ? "text-gray-400 text-sm text-nowrap" : "text-gray-600 text-sm text-nowrap"}>Single upload</span>
-                      <Switch bind:checked={isBulkUpload} />
-                      <span class={isBulkUpload ? "text-gray-600 text-nowrap" : "text-gray-400 text-nowrap"}>Bulk upload</span>
-                    </div>
-                  </div>
-
-                  <div class="grid gap-4 w-full">
-                    <div class="mt-4">
-                      <Label for="camera-name">Camera Name</Label>
-                      <Input
-                        id="camera-name"
-                        placeholder="Home-Porch"
-                        class="w-full mt-3"
-                        bind:value={cameraName}
-                      />
-                    </div>
-
-                    <div class="flex items-center gap-4 text-sm pb-2 mt-4">
-                      <button
-                        on:click={() => (usingRTSP = true)}
-                        class={usingRTSP ? "text-primary font-semibold border-b-2 border-[#015A62]" : "text-[#5F6064]"}
-                      >Using URL</button>
-                      <button
-                        on:click={() => (usingRTSP = false)}
-                        class={!usingRTSP ? "text-primary font-semibold border-b-2 border-[#015A62]" : "text-[#5F6064]"}
-                      >Using Details</button>
-                    </div>
-
-                    {#if usingRTSP}
-                      <div class="grid gap-4">
-                        <div class="gap-4">
-                          <Label for="main-url">Main URL</Label>
-                          <Input
-                            id="main-url"
-                            placeholder="rtsp://admin:password@123.123.123.123/stream/1"
-                            class="col-span-3 mt-3"
-                            bind:value={mainURL}
-                          />
-                        </div>
-                        <div class="gap-4 mt-1">
-                          <Label for="sub-url">Sub URL</Label>
-                          <Input
-                            id="sub-url"
-                            placeholder="rtsp://admin:password@123.123.123.123/sub-stream/1"
-                            class="col-span-3 mt-2"
-                            bind:value={subURL}
-                          />
-                        </div>
-                      </div>
-                    {:else}
-                      <div class="grid gap-4">
-                        <div class="grid gap-4 py-4">
-                          <div class="grid grid-cols-4 items-center gap-4">
-                            <Label for="camera-username">Username</Label>
-                            <Input
-                              id="camera-username"
-                              class="col-span-3"
-                              placeholder={"Camera portal username"}
-                              disabled={disabled === "other"}
-                              bind:cameraUsername
-                              on:change={(e) => (cameraUsername = e.target.value)}
-                            />
-                            <Label for="camera-pass">Password</Label>
-                            <Input
-                              autocomplete="new-password"
-                              id="camera-pass"
-                              class="col-span-3"
-                              placeholder={"Camera portal password"}
-                              type="password"
-                              disabled={disabled === "other"}
-                              bind:cameraPass
-                              on:change={(e) => (cameraPass = e.target.value)}
-                            />
-                            <Label for="camera-ip">IP Address</Label>
-                            <Input
-                              id="camera-ip"
-                              class="col-span-3"
-                              placeholder={"address associated with camera"}
-                              disabled={disabled === "other"}
-                              bind:cameraIp
-                              on:change={(e) => (cameraIp = e.target.value)}
-                            />
-                            <Label for="camera-port">HTTP Port</Label>
-                            <Input
-                              id="camera-port"
-                              class="col-span-3"
-                              placeholder={"Port"}
-                              disabled={disabled === "other"}
-                              bind:httpPort
-                              on:change={(e) => (httpPort = e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    {/if}
-
-                    <h3 class="text-xl font-semibold mt-5 border-b pb-2">Features</h3>
-
-                    <div class="flex item-start gap-x-10">
-                      <h5 class="text-sm font-medium text-nowrap">Camera Features</h5>
-                      <div class="grid grid-cols-4 items-center gap-4">
-                        <div class="col-span-3 flex flex-wrap gap-8">
-                          <label class="flex items-center gap-4">
-                            <Switch bind:checked={features.feedSaving} class="w-8 h-5" />
-                            <span class="text-sm text-neutral-500">Feed Saving</span>
-                          </label>
-                          <label class="flex items-center gap-4">
-                            <Switch bind:checked={features.vehicleScan} class="w-8 h-5" />
-                            <span class="text-sm text-neutral-500">Vehicle Scan</span>
-                          </label>
-                          <label class="flex items-center gap-4">
-                            <Switch bind:checked={features.faceScan} class="w-8 h-5" />
-                            <span class="text-sm text-neutral-500">Face Scan</span>
-                          </label>
-                          <label class="flex items-center gap-4">
-                            <Switch bind:checked={features.priority} class="w-8 h-5" />
-                            <span class="text-sm text-neutral-500">Priority</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="grid grid-cols-4 items-center gap-4 mt-8">
-                      <span class="text-sm font-medium">Motion Sensitivity</span>
-                      <div class="flex items-center gap-4 grid-cols-3">
-                        <Slider
-                          min={0}
-                          value={[motionThresh]}
-                          max={100}
-                          step={50}
-                          class="w-32"
-                          onValueChange={(e) => {
-                            motionThresh = e[0];
-                          }}
-                        />
-                        {motionThresh === 0 ? "Low" : motionThresh === 50 ? "Mid" : "High"}
-                      </div>
-                    </div>
-                  </div>
-                {/if}
-              </div>
+              <!-- Camera mode content goes here -->
             </div>
-
-            <!-- Add Server Mode -->
-          {:else if modeAdd === 4}
-            <div class="mb-4">
-              {#each serverIPs as ip, index}
-                <Label for="ip-address" class="text-lg font-semibold">IP Address {index + 1}</Label>
-                <Input
-                  id="ip-address-{index}"
-                  placeholder="Enter IP Address"
-                  bind:value={serverIPs[index]}
-                  class="w-full sm:w-96 bg-[#F6F6F6] dark:bg-neutral-400 mt-1 dark:text-black dark:placeholder:text-black"
-                />
-              {/each}
-            </div>
-            <button class="text-orange-500 flex items-center" on:click={addMoreIPs}>
-              <PlusCircle size={18} class="mr-2" /> Add more
-            </button>
-          {/if}
-        </div>
-
-        <Dialog.Footer>
-          <!-- Dialog Footer -->
-          {#if modeAdd === 1}
-            <!-- Add Node -->
-            <div class="mt-auto w-32 self-end m-4">
-              <Button
-                disabled
-                type="submit"
-                on:click={() => handleAddNode()}
-                variant="brand"
-                class="w-full"
-              >Submit</Button>
-            </div>
-          {:else if modeAdd === 2}
-            <!-- Add Sub-Node -->
-            <Button
-              disabled
-              class="mt-auto w-32 self-end m-4"
-              variant="brand"
-              on:click={() => handleAddSubNodes()}
-            >Submit</Button>
-          {:else if modeAdd === 3}
-            {#if addDevice === 1}
-              <!-- Add Camera -->
-              <Button
-                disabled
-                class="mt-auto w-32 self-end m-4"
-                variant="brand"
-                on:click={onSubmit}
-                type="submit"
-              >Submit</Button>
-            {:else}
-              <!-- Add NVR -->
-              <Button
-                disabled
-                class="mt-auto w-32 self-end m-4"
-                variant="brand"
-                on:click={onSubmitNVR}
-                type="submit"
-              >Add NVR</Button>
-            {/if}
-          {:else}
-            <!-- Add Server -->
-            <Button
-              disabled
-              class="mt-auto w-32 self-end m-4"
-              variant="brand"
-              type="submit"
-            >Submit</Button>
-          {/if}
-        </Dialog.Footer>
+          </div>
+        {:else if modeAdd === 4}
+          <h2 class="text-xl font-bold mb-4 border-b pb-2">Add Server</h2>
+          <div class="mb-4">
+            {#each serverIPs as ip, index}
+              <Label for="ip-address" class="text-lg font-semibold">IP Address {index + 1}</Label>
+              <Input
+                id="ip-address-{index}"
+                placeholder="Enter IP Address"
+                bind:value={serverIPs[index]}
+                class="w-full sm:w-96 bg-[#F6F6F6] dark:bg-neutral-400 mt-1 dark:text-black dark:placeholder:text-black"
+              />
+            {/each}
+          </div>
+          <button class="text-orange-500 flex items-center" on:click={addMoreIPs}>
+            <PlusCircle size={18} class="mr-2" /> Add more
+          </button>
+        {/if}
       </div>
     </div>
-  </Dialog.Content>
+  </div>
+
+  <Dialog.Footer>
+    <!-- Dialog Footer -->
+    {#if modeAdd === 1}
+      <div class="mt-auto w-32 self-end m-4">
+        <Button
+          disabled
+          type="submit"
+          on:click={() => handleAddNode()}
+          variant="brand"
+          class="w-full"
+        >Submit</Button>
+      </div>
+    {:else if modeAdd === 2}
+      <Button
+        disabled
+        class="mt-auto w-32 self-end m-4"
+        variant="brand"
+        on:click={() => handleAddSubNodes()}
+      >Submit</Button>
+    {:else if modeAdd === 3}
+      <Button
+        disabled
+        class="mt-auto w-32 self-end m-4"
+        variant="brand"
+        on:click={onSubmit}
+        type="submit"
+      >Submit</Button>
+    {:else}
+      <Button
+        disabled
+        class="mt-auto w-32 self-end m-4"
+        variant="brand"
+        type="submit"
+      >Submit</Button>
+    {/if}
+  </Dialog.Footer>
+</Dialog.Content>
 </Dialog.Root>
