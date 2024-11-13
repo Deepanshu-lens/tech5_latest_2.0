@@ -21,6 +21,7 @@
     }
 
     if (window.api) {
+      console.log("CALLED FROM AVATAR");
       window.api.navigate("/login");
     } else {
       window.location.href = "/login";

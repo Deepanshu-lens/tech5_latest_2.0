@@ -23,7 +23,7 @@
   let state = "LOADING";
 
   function fullscreen() {
-    videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}_FULL`);
+    // videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}_FULL`);
 
     if (videoElement.requestFullscreen) {
       videoElement.requestFullscreen({ navigationUI: "show" });
@@ -32,7 +32,7 @@
         function handleFullscreenChange() {
           if (!document.fullscreenElement) {
             // Reset the data-url when exiting fullscreen
-            videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}`);
+            // videoElement.changeURL(`wss://vms.lenscorp.cloud/api/ws?src=${id}`);
 
             // Remove the event listener after fullscreen change is handled
             document.removeEventListener(

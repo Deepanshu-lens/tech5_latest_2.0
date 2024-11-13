@@ -13,11 +13,11 @@
     pb.authStore.clear();
   }
 
-  if (window.api) {
-    window.api.invoke("clear-auth-token");
-  } else {
-    localStorage.removeItem("pb_auth_token");
-  }
+  // if (window.api) {
+  //   window.api.invoke("clear-auth-token");
+  // } else {
+  //   localStorage.removeItem("pb_auth_token");
+  // }
 
   const loginSchema = userSchema.pick({ email: true });
 
@@ -125,6 +125,19 @@
       {:else}
         Sign In
       {/if}
+    </button>
+    <button
+      class="inline-block cursor-pointer align-baseline font-bold text-sm text-[#797c80] /[.7] mt-4"
+      on:click={() => {
+        if (window.api) {
+          window.api.navigate("/register");
+        } else {
+          window.location.href = "/register";
+        }
+      }}
+    >
+      Don't have an account yet?
+      <span class="ml-1 text-primary font-semibold"> Sign up </span>
     </button>
   </div>
 </form>

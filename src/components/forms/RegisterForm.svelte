@@ -175,5 +175,18 @@
         Sign Up
       {/if}
     </button>
+    <button
+      class="inline-block cursor-pointer align-baseline font-bold text-sm text-[#797c80] /[.7] mt-4"
+      on:click={() => {
+        if (window.api) {
+          window.api.navigate("/login");
+        } else {
+          window.location.href = "/login";
+        }
+      }}
+    >
+      Already have an account?
+      <span class="ml-1 text-primary font-semibold"> Log In </span>
+    </button>
   </div>
 </form>

@@ -46,7 +46,7 @@
       case 1:
         return "grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);";
       case 2:
-        return "grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(1, 1fr);";
+        return "grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(2, 1fr);";
       case 3:
         return "grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(1, 1fr);";
       case 4:

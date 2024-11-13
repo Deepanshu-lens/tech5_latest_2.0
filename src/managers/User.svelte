@@ -41,7 +41,11 @@
         user.set(pb.authStore.model);
       } else {
         if (window.api) {
-          window.api.navigate("/login");
+          const isLoginPage =
+            /\/login(\.html)?$/.test(window.location.pathname) ||
+            /\/register(\.html)?$/.test(window.location.pathname);
+          console.log("CALLED FROM User", isLoginPage);
+          if (!isLoginPage) window.api.navigate("/login");
         } else {
           const isLoginPage =
             window.location.pathname === "/login" ||

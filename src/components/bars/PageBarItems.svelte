@@ -5,6 +5,14 @@
   import axios from "axios";
 
   let currentPath = window.location.pathname;
+  if (window.api) {
+    const pathSegments = currentPath.split("/");
+    const fileName = pathSegments[pathSegments.length - 1];
+
+    // Remove the ".html" extension if it exists
+    currentPath = "/" + fileName.replace(".html", "");
+    if (currentPath === "/index") currentPath = "/";
+  }
 
   // Function to check if the link is active
   let isActive: (href: string) => boolean;
@@ -41,15 +49,27 @@
     : "flex justify-center space-x-6 w-full"}
 >
   <nav class="hidden md:flex space-x-4">
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     {#each data as link}
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <!-- svelte-ignore a11y_missing_attribute -->
       <a
-        href={link.link}
         on:click={(e) => {
           if (disabledPaths.includes(link.link)) {
             e.preventDefault();
             return;
           }
           currentPath = link.link;
+          if (window.api) {
+            if (link.link === "/") {
+              window.api.navigate("/index");
+            } else {
+              window.api.navigate(link.link);
+            }
+          } else {
+            window.location.href = link.link;
+          }
         }}
         class={cn(
           "text-sm transition-all px-3 py-2 rounded-md",

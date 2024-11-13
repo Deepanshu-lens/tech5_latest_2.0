@@ -23,6 +23,7 @@
     }
 
     localStorage.removeItem("pb_auth_token");
+    console.log("CALLED FROM AVATAR");
     window.location.href = "/login";
   }
 </script>
