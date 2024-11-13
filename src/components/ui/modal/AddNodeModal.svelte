@@ -315,7 +315,8 @@
       <div
         class="w-1/3 border-r px-4 bg-[#F3F3F3] dark:bg-black dark:text-white h-full"
       >
-        <button
+        <Button
+          variant="brand"
           class="font-semibold w-full text-left my-3 px-4 py-2 rounded-md dark:hover:bg-neutral-700 {modeAdd ===
           1
             ? 'dark:bg-neutral-700 shadow-md bg-white'
@@ -323,7 +324,7 @@
           on:click={() => (modeAdd = 1)}
         >
           Add Node
-        </button>
+        </Button>
         <button
           class="font-semibold w-full text-left my-3 px-4 py-2 rounded-md dark:hover:bg-neutral-700 {modeAdd ===
           2
