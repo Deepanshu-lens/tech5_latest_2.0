@@ -6,7 +6,7 @@
   import { toast } from "svelte-sonner";
   let showSelection: string = "";
   import { cameras } from "@/stores";
-  import AlertsDrawerMobile from "./AlertsDrawerMobile.svelte";
+  import AlertsDrawerMobile from "../AlertsDrawerMobile.svelte";
   import { isAlertMobileOpen } from "@/stores/ui";
 
   export let landscape: boolean;

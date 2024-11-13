@@ -321,7 +321,7 @@
           <TabsContent value="line-crossing">
             <div class="rounded-md p-2">
               <div
-                class="flex items-start space-x-48 border-b pb-2 justify-between"
+                class="flex items-start space-x-56  border-b pb-2 justify-between"
               >
                 <div class="space-y-1">
                   <p class="text-base font-medium">Line Crossing</p>

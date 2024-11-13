@@ -111,7 +111,7 @@
     class="absolute left-4 bottom-2 rounded-md bg-neutral-600 bg-opacity-50 transition-opacity duration-300 text-white flex items-center gap-x-2 w-10"
   >
     <PersonStanding size={18} />
-    {$personCount?.count}
+    {$personCount?.count || 0}
   </div>
   <div
     class="absolute left-4 top-2 rounded-md bg-neutral-600 bg-opacity-50 transition-opacity duration-300 text-white flex items-center gap-x-2 w-10"

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Dialog from "@/components/ui/dialog";
   import { Input } from "@/components/ui/input";
-  import pb from "@/lib/sharedPB";
+  import pb from "@/lib/pb";
   import { Label } from "@/components/ui/label";
   import { Button } from "@/components/ui/button";
   import { selectedNode, nodes, user } from "@/stores";
@@ -38,8 +38,8 @@
     </div>
     <Dialog.Footer class="flex items-center justify-between">
       <Button
+        variant="brand"
         type="submit"
-        class="bg-[#015A62] text-white font-semibold"
         on:click={editNode}
         disabled={nodeName === ""}>Confirm</Button
       >

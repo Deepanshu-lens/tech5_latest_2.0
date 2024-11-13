@@ -5,8 +5,8 @@ import { Toaster } from "@/components/ui/sonner";
 import User from "@/managers/User.svelte";
 import PageBar from "@/components/bars/PageBar.astro";
 import PageBarMobile from "@/components/bars/PageBarMobile.astro";
-import MobileMenu from "@/components/bars/MobileMenu.svelte";
-import MobileNav from "@/components/bars/MobileNav.svelte";
+import MobileNavbars from "@/components/bars/MobileNavbar.svelte";
+
 interface Props {
   title: string;
   topbar?: boolean;
@@ -60,8 +60,7 @@ const { title, topbar = true } = Astro.props;
     </div>
     <Toaster client:only="svelte" />
     <div class="lg:hidden block">
-      <MobileMenu client:only="svelte" />
-      <MobileNav client:only="svelte" />
+      <MobileNavbars client:only="svelte" />
     </div>
     <slot />
   </body>

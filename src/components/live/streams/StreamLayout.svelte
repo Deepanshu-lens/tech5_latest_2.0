@@ -12,7 +12,6 @@
   import Pagination from "./pagination/Pagination.svelte";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
-  import Button from "@/components/ui/button/button.svelte";
 
   export let STREAM_URL = "";
   const isMobile = writable(false);
@@ -47,7 +46,7 @@
       case 1:
         return "grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);";
       case 2:
-        return "grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(2, 1fr);";
+        return "grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(1, 1fr);";
       case 3:
         return "grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(1, 1fr);";
       case 4:
@@ -91,22 +90,23 @@
   {#if $nodes.length === 0}
     <div
       class="
-    flex
-    flex-col
-    items-start
-    justify-center h-screen w-screen
-    dark:bg-dark-add-node
-    bg-no-repeat
-    pl-32
-    bg-light-add-node
-    bg-contain
-    bg-right
-    dark:bg-cover"
+        flex
+        flex-col
+        items-start
+        justify-center h-screen w-screen
+        dark:bg-dark-add-node
+        bg-no-repeat
+        pl-4 lg:pl-32
+        bg-light-add-node
+        bg-contain
+        bg-right
+        dark:bg-cover
+      "
     >
       <form
         on:submit={(e) => e.preventDefault()}
         method="POST"
-        class="flex flex-col"
+        class="flex flex-col w-full max-w-md"
       >
         <label for="nodeName" class="font-medium text-start self-start mb-2">
           Node name
@@ -115,34 +115,50 @@
           name="name"
           required
           bind:value={nodeName}
-          class="w-[480px] text-black dark:text-white dark:bg-background bg-transparent font-medium px-4 h-[48px] rounded-md border-2 border-solid border-[#015a62] dark:border-none mb-6"
+          class="text-black dark:text-white dark:bg-background bg-transparent font-medium px-4 h-[48px] rounded-md border-2 border-solid border-[#015a62] dark:border-none mb-6"
         />
-        <Button
-         variant="brand"
+        <button
           class="flex max-w-[160px] hover:bg-[#015a62]/[.9] dark:bg-transparent bg-[#015a62] border-2 border-white border-solid dark:hover:bg-[white] dark:hover:text-[#015a62] text-md text-white items-center justify-center py-2 px-6 font-medium rounded-lg"
           type="submit"
           on:click={addNode}
         >
           Add Node
-        </Button>
+        </button>
       </form>
     </div>
   {:else}
     <div class="flex flex-col flex-grow mt-4">
-      <div
-        class="grid grid-cols-1 gap-4 p-4 w-full lg:grid-cols-4"
-        style={gridStyle + " height: calc(100vh - 7rem); overflow-y: auto;"}
-      >
-        {#key $cameras}
-          {#each $cameras as camera}
-            <StreamTile
-              name={camera?.name}
-              id={camera.id}
-              url={`${STREAM_URL}/api/ws?src=${camera.id}`}
-            ></StreamTile>
-          {/each}
-        {/key}
-      </div>
+      {#if $isMobile}
+        <div
+          class="grid grid-cols-1 gap-4 p-4 w-full lg:grid-cols-4 pb-[30vh]"
+          style={`grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(${$cameras?.length}, 150px); height: calc(100vh - 7rem); overflow-y: auto; `}
+        >
+          {#key $cameras}
+            {#each $cameras as camera}
+              <StreamTile
+                name={camera?.name}
+                id={camera.id}
+                url={`${STREAM_URL}/api/ws?src=${camera.id}`}
+              />
+            {/each}
+          {/key}
+        </div>
+      {:else}
+        <div
+          class="grid grid-cols-1 gap-4 p-4 w-full lg:grid-cols-4"
+          style={`${gridStyle} height: calc(100vh - 7rem); overflow-y: auto; `}
+        >
+          {#key $cameras}
+            {#each $cameras as camera}
+              <StreamTile
+                name={camera?.name}
+                id={camera.id}
+                url={`${STREAM_URL}/api/ws?src=${camera.id}`}
+              />
+            {/each}
+          {/key}
+        </div>
+      {/if}
 
       {#if $totalCameras > 0}
         <Pagination />

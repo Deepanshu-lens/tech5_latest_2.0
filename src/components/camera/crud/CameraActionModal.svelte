@@ -137,7 +137,7 @@ wss://view.lenscorp.cloud/api/ws?src=${camera.id}`
           </div>
         </div>
         <div class="flex flex-1 flex-col mx-auto">
-          <Button type="submit" class="bg-[#015A62] text-white font-semibold"
+          <Button type="submit" variant="brand" class="bg-[#015A62] text-white font-semibold"
             >Confirm</Button
           >
         </div>
